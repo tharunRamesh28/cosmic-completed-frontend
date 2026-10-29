@@ -136,29 +136,36 @@ export const OrderPage: React.FC = () => {
       // DIAGNOSTIC STEP 2: Inspect Google authentication and session immediately before submission
       const {
         data: { session },
-        error: sessionError,
       } = await supabase.auth.getSession();
+      // Input sanitization & normalization
+      const sanitizedName = name.trim().slice(0, 100);
+      const sanitizedEmail = email.trim().toLowerCase().slice(0, 120);
+      const sanitizedPhone = phone.trim().slice(0, 30) || null;
+      const sanitizedCompany = company.trim().slice(0, 100) || null;
+      const sanitizedProjectName = projectName.trim().slice(0, 120);
+      const sanitizedDescription = projectDescription.trim().slice(0, 5000);
+
+      // Client-side rate-limit / spam prevention check
+      const lastSubmissionTime = localStorage.getItem('last_project_submission_ts');
+      if (lastSubmissionTime && Date.now() - parseInt(lastSubmissionTime, 10) < 15000) {
+        setFormError('Please wait a few seconds before submitting another project brief.');
+        setSubmitting(false);
+        return;
+      }
 
       const {
         data: { user },
-        error: userError,
       } = await supabase.auth.getUser();
-
-      console.log('Supabase session:', session ? 'Active' : null);
-      console.log('Supabase user:', user ? { id: user.id, email: user.email } : null);
-      console.log('Supabase user ID:', user?.id);
-      if (sessionError) console.log('Session error:', sessionError);
-      if (userError) console.log('User error:', userError);
 
       const submissionRecord = {
         user_id: user?.id || null,
-        client_name: name.trim(),
-        email: email.trim().toLowerCase(),
-        phone: phone.trim() || null,
-        company: company.trim() || null,
-        project_name: projectName.trim(),
+        client_name: sanitizedName,
+        email: sanitizedEmail,
+        phone: sanitizedPhone,
+        company: sanitizedCompany,
+        project_name: sanitizedProjectName,
         project_type: projectType,
-        project_description: projectDescription.trim(),
+        project_description: sanitizedDescription,
         expected_timeline: expectedTimeline || null,
         status: 'new' as const,
       };
@@ -168,9 +175,8 @@ export const OrderPage: React.FC = () => {
         .insert(submissionRecord);
 
       if (submissionError) {
-        console.error('PROJECT INSERT ERROR:', submissionError);
         if (!user && (submissionError.code === '42501' || submissionError.message?.toLowerCase().includes('permission') || submissionError.message?.toLowerCase().includes('policy'))) {
-          setFormError('Please sign in with Google before submitting your project so we can link your request to your account.');
+          setFormError('Please sign in before submitting your project so we can link your request to your account.');
         } else {
           setFormError(
             submissionError.message ||
@@ -181,7 +187,7 @@ export const OrderPage: React.FC = () => {
         return;
       }
 
-      console.log('Project submitted successfully');
+      localStorage.setItem('last_project_submission_ts', Date.now().toString());
 
       // STEP 6: Upload selected files if any were provided
       if (selectedFiles.length > 0) {

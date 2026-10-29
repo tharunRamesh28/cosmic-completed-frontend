@@ -212,14 +212,8 @@ function formatFileSize(bytes: number | null): string {
     }
   };
 
-    const handleDeleteProject = async () => {
+  const handleDeleteProject = async () => {
     if (!projectToDelete) return;
-    
-    // CRITICAL DEBUG TEST
-    console.log("PROJECT ID:\n" + projectToDelete.id);
-    console.log("PROJECT NAME:\n" + projectToDelete.project_name);
-    console.log("PROJECT STATUS:\n" + projectToDelete.status);
-
     setActionLoading(true);
     try {
       // Step 3 & 4: Call Secure RPC for deletion
