@@ -40,6 +40,7 @@ export const ENGINEERING_DISCIPLINES = [
   'CAD',
   'Embedded Systems',
   'IoT',
+  'Robotics',
   'Full-Stack Software',
   'ML',
 ];

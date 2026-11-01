@@ -4,7 +4,8 @@ import { ArrowRight, Check, Activity, Cpu, Box, Terminal, Bot } from 'lucide-rea
 import { Link, useRouter } from '../router';
 import { HERO_PRODUCT_IMAGE } from '../data/cosmicData';
 import smartDripImg from '../assets/smartdrip_plus.jpg';
-import roboticsImg from '../../projects/Bluetooth-Controlled Robotic Arm.png';
+import roboticsImg from '../assets/robotics_roverflow.jpg';
+import cadImg from '../assets/cad_design_box.jpg';
 import homeAutomationImg from '../../projects/Automatic Home Automation System.png';
 import smartEnergyImg from '../../projects/Smart energy monitoring & automatic lighting.png';
 import webDevImg from '../assets/web_development.png';
@@ -72,8 +73,7 @@ export const ServicesPage: React.FC = () => {
         'Mechanical Design',
         'Electronics Integration',
       ],
-      image:
-        'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=900&q=80',
+      image: cadImg,
       badge: 'PRECISION ENCLOSURES',
       icon: Box,
     },

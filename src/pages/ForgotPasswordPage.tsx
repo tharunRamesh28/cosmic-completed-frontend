@@ -3,6 +3,7 @@ import { CursorGrid } from '../components/CursorGrid';
 import { Shield, Mail, ArrowRight, ArrowLeft, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Link } from '../router';
+import { validateEmail, checkSubmissionRateLimit, recordSubmissionTimestamp } from '../lib/validators';
 
 export const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -19,6 +20,17 @@ export const ForgotPasswordPage: React.FC = () => {
       setErrorMsg('Please enter your email address.');
       return;
     }
+    const emailCheck = validateEmail(email);
+    if (!emailCheck.isValid) {
+      setErrorMsg(emailCheck.error || 'Please enter a valid email address.');
+      return;
+    }
+
+    const rateCheck = checkSubmissionRateLimit('cc_reset_password_ts', 30000); // 30 sec cooldown
+    if (!rateCheck.allowed) {
+      setErrorMsg(`Please wait ${rateCheck.waitSec}s before requesting another reset link.`);
+      return;
+    }
 
     setLoading(true);
 
@@ -30,6 +42,7 @@ export const ForgotPasswordPage: React.FC = () => {
       if (error) {
         setErrorMsg(error.message || 'Unable to transmit reset link. Please check your email.');
       } else {
+        recordSubmissionTimestamp('cc_reset_password_ts');
         setSuccessMsg('Password recovery instructions transmitted. Please check your inbox.');
       }
     } catch {

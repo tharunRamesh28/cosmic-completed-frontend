@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Check, ArrowRight, Shield, Sparkles, Cpu, Radio, Globe, Compass, Bot, Send, CheckCircle2 } from 'lucide-react';
 import { ProjectInquiry } from '../types';
 import { supabase } from '../lib/supabase';
+import { validateEmail, sanitizeText, checkSubmissionRateLimit, recordSubmissionTimestamp } from '../lib/validators';
 
 interface ProjectModalProps {
   isOpen: boolean;
@@ -72,13 +73,19 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
       setErrorMessage('Please provide your email address.');
       return;
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email.trim())) {
-      setErrorMessage('Please provide a valid email address.');
+    const emailCheck = validateEmail(formData.email);
+    if (!emailCheck.isValid) {
+      setErrorMessage(emailCheck.error || 'Please provide a valid email address.');
       return;
     }
     if (!formData.description.trim()) {
       setErrorMessage('Please outline your technical requirements.');
+      return;
+    }
+
+    const rateCheck = checkSubmissionRateLimit('cc_modal_inquiry_ts', 12000);
+    if (!rateCheck.allowed) {
+      setErrorMessage(`Please wait ${rateCheck.waitSec}s before submitting another inquiry.`);
       return;
     }
 
@@ -88,16 +95,21 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
         data: { user },
       } = await supabase.auth.getUser();
 
+      const sanitizedName = sanitizeText(formData.name, 100);
+      const sanitizedCompany = formData.company ? sanitizeText(formData.company, 100) : null;
+      const sanitizedDescription = sanitizeText(formData.description, 5000);
+      const sanitizedServices = formData.services.map(s => sanitizeText(s, 50)).join(' & ');
+
       const { data, error } = await supabase
         .from('project_submissions')
         .insert({
           user_id: user?.id || null,
-          client_name: formData.name.trim(),
-          email: formData.email.trim().toLowerCase(),
-          company: formData.company?.trim() || null,
-          project_name: `${formData.services.join(' & ')} - ${formData.currentPhase}`,
+          client_name: sanitizedName,
+          email: formData.email.trim().toLowerCase().slice(0, 120),
+          company: sanitizedCompany,
+          project_name: `${sanitizedServices} - ${formData.currentPhase}`.slice(0, 150),
           project_type: formData.services[0] || 'Hardware',
-          project_description: formData.description.trim(),
+          project_description: sanitizedDescription,
           expected_timeline: formData.timeline || null,
           status: 'new',
         })
@@ -114,6 +126,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
         setSubmitting(false);
         return;
       }
+
+      recordSubmissionTimestamp('cc_modal_inquiry_ts');
 
       const generatedId = data?.id ? `CC-${data.id.slice(0, 8).toUpperCase()}` : `CC-${Math.floor(100000 + Math.random() * 900000)}`;
       setReferenceId(generatedId);

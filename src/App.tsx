@@ -13,6 +13,7 @@ import { Footer } from './components/Footer';
 import { ProjectModal } from './components/ProjectModal';
 import { ShaderBackground } from './components/ShaderBackground';
 import ClickSpark from './components/ClickSpark';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Route-level code-splitting for performance
 const WorksPage = React.lazy(() => import('./pages/WorksPage').then(m => ({ default: m.WorksPage })));
@@ -271,10 +272,12 @@ function AppContent() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <RouterProvider>
-        <AppContent />
-      </RouterProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <RouterProvider>
+          <AppContent />
+        </RouterProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }

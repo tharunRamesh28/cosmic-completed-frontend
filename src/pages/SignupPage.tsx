@@ -3,6 +3,7 @@ import { CursorGrid } from '../components/CursorGrid';
 import { Shield, Lock, Mail, User, ArrowRight, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useRouter, Link } from '../router';
+import { validateEmail } from '../lib/validators';
 
 export const SignupPage: React.FC = () => {
   const { navigate } = useRouter();
@@ -28,8 +29,17 @@ export const SignupPage: React.FC = () => {
       setErrorMsg('Please enter your email address.');
       return;
     }
-    if (password.length < 6) {
-      setErrorMsg('Password must be at least 6 characters long.');
+    const emailCheck = validateEmail(email);
+    if (!emailCheck.isValid) {
+      setErrorMsg(emailCheck.error || 'Please enter a valid email address.');
+      return;
+    }
+    if (password.length < 8) {
+      setErrorMsg('Password must be at least 8 characters long for production security.');
+      return;
+    }
+    if (password.length > 72) {
+      setErrorMsg('Password exceeds maximum allowed length.');
       return;
     }
     if (password !== confirmPassword) {

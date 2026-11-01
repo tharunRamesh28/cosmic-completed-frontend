@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Shield, Lock, Mail, ArrowRight, AlertCircle, ArrowLeft } from 'lucide-react';
 import { supabase, AUTHORIZED_ADMIN_UUID } from '../lib/supabase';
 import { useRouter, Link } from '../router';
+import { validateEmail, checkSubmissionRateLimit, recordSubmissionTimestamp } from '../lib/validators';
 
 export const AdminLoginPage: React.FC = () => {
   const { navigate } = useRouter();
@@ -42,9 +43,28 @@ export const AdminLoginPage: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
+
+    const emailCheck = validateEmail(email);
+    if (!emailCheck.isValid) {
+      setErrorMsg(emailCheck.error || 'Please enter a valid administrator email.');
+      return;
+    }
+
+    if (!password) {
+      setErrorMsg('Please enter your administrator password.');
+      return;
+    }
+
+    const rateCheck = checkSubmissionRateLimit('cc_admin_login_ts', 5000);
+    if (!rateCheck.allowed) {
+      setErrorMsg(`Too many rapid attempts. Please wait ${rateCheck.waitSec}s.`);
+      return;
+    }
+
     setLoading(true);
 
     try {
+      recordSubmissionTimestamp('cc_admin_login_ts');
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password: password,

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin-login
+Disallow: /my-requests
+Disallow: /auth/callback
+
+Sitemap: https://tiny-dieffenbachia-8126ed.netlify.app/sitemap.xml
+

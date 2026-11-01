@@ -37,11 +37,77 @@ import projectImg_14 from '../../projects/Smart Patient Bed Fall Detection & Ale
 import projectImg_15 from '../../projects/Sound Reactive LED System.png';
 import projectImg_16 from '../../projects/Temperature Monitoring & SMS Alert System.png';
 import projectImg_17 from '../../projects/Vehicle Cabin Air Quality Monitoring & Smart Purification System.png';
+import projectImg_18 from '../../projects/Autonomous Delivery Robot with Pick-and-Drop System.png';
 
 export const PROJECTS_DATA: Project[] = [
   {
-    id: "automatic-lpg-gas-leak-detection-safety-system",
+    id: "autonomous-delivery-robot",
     number: "01",
+    title: "Autonomous Delivery Robot with Pick-and-Drop System",
+    filename: "Autonomous Delivery Robot with Pick-and-Drop System",
+    category: "ROBOTICS \u00b7 AUTONOMOUS SYSTEMS \u00b7 EMBEDDED SYSTEMS",
+    categories: ["ALL", "ROBOTICS", "AUTOMATION", "EMBEDDED"],
+    shortDescription: "An autonomous mobile robotic system designed to automate material transportation through an intelligent pickup, navigation, transportation and drop-off workflow. The robot collects materials from a designated pickup location and delivers them to the assigned destination using an integrated pick-and-drop mechanism.",
+    overview: "The Autonomous Delivery Robot with Pick-and-Drop System is an intelligent robotic platform developed to automate material transportation between designated locations.\n\nThe system combines mobile robotics, autonomous movement and a robotic pickup-and-drop mechanism to perform delivery tasks with reduced manual intervention.\n\nIt is designed to identify the assigned pickup and drop locations, collect the required material, transport it and complete the delivery process.",
+    problem: "Manual material transportation in workplaces, laboratories, warehouses and industrial environments requires continuous human involvement.\n\nTraditional transportation methods can involve:\n• Repetitive manual material handling.\n• Time-consuming movement between locations.\n• Dependence on human operators for transportation.\n• Difficulty managing repeated delivery tasks.\n• Safety challenges when transporting materials through busy environments.",
+    solution: "The proposed system uses an autonomous mobile robot integrated with a material pickup-and-drop mechanism.\n\nThe robot receives a delivery task, identifies the assigned pickup and destination points, navigates along its planned route, collects the material and transports it to the designated drop location.\n\nThe system aims to improve transportation efficiency, reduce repetitive manual work and demonstrate intelligent robotic automation.",
+    features: [
+      "Autonomous Robot Movement",
+      "Pickup Location Selection",
+      "Automated Material Collection",
+      "Integrated Pick-and-Drop Mechanism",
+      "Destination-Based Delivery",
+      "Obstacle Detection and Avoidance",
+      "Controlled Material Transportation",
+      "Automated Delivery Workflow",
+      "Robotic System Coordination",
+      "Reduced Manual Intervention"
+    ],
+    operation: [
+      "01 \u2014 Task Selection: The user selects the required pickup location and delivery destination.",
+      "02 \u2014 Route Planning: The robot determines its route between the assigned locations using its implemented navigation system.",
+      "03 \u2014 Autonomous Navigation: The robot moves towards the designated pickup location.",
+      "04 \u2014 Pickup Identification: The system identifies the pickup position and prepares the collection mechanism.",
+      "05 \u2014 Material Pickup: The robotic mechanism collects the designated material.",
+      "06 \u2014 Delivery Navigation: The robot transports the collected material towards the destination.",
+      "07 \u2014 Drop Location Identification: The robot identifies the assigned drop position.",
+      "08 \u2014 Material Drop: The pickup-and-drop mechanism places the material at the designated destination.",
+      "09 \u2014 Mission Completion: The delivery task is marked complete."
+    ],
+    technologies: [
+      "Mobile Robot Chassis",
+      "Microcontroller / Embedded Controller",
+      "Robotic Arm / Gripper Actuation",
+      "Servo / DC Motor Drives",
+      "Obstacle Detection Sensors",
+      "Navigation / Route Guidance System",
+      "Power Management / LiPo Battery Pack",
+      "Hardware Confirmation Pending"
+    ],
+    applications: [
+      "Warehouse Material Transportation",
+      "Industrial Material Handling",
+      "Laboratory Equipment Delivery",
+      "Smart Manufacturing Facilities",
+      "Institutional and Campus Delivery",
+      "Internal Logistics Automation",
+      "Research and Development Facilities",
+      "Smart Factory Environments"
+    ],
+    outcome: "The project demonstrates the integration of mobile robotics and automated material handling into a unified delivery workflow.\n\nThe system focuses on combining autonomous transportation with a controlled pickup-and-drop process to reduce repetitive manual material movement.\n\nWorkflow: TASK SELECTION \u2192 ROUTE PLANNING \u2192 AUTONOMOUS NAVIGATION \u2192 MATERIAL PICKUP \u2192 TRANSPORTATION \u2192 MATERIAL DROP \u2192 DELIVERY COMPLETION",
+    highlights: [
+      "AUTONOMOUS MOBILITY — Designed to transport materials between assigned locations.",
+      "INTELLIGENT PICKUP — Integrates a mechanism for collecting designated materials.",
+      "SMART TRANSPORTATION — Combines robotic movement with delivery task execution.",
+      "CONTROLLED DROPOFF — Performs material placement at the assigned destination.",
+      "ROBOTIC AUTOMATION — Demonstrates the integration of mobile robotics and material handling."
+    ],
+    slug: "autonomous-delivery-robot",
+    image: projectImg_18
+  },
+  {
+    id: "automatic-lpg-gas-leak-detection-safety-system",
+    number: "02",
     title: "Automatic LPG Gas Leak Detection & Safety System",
     filename: "Automatic LPG Gas Leak Detection & Safety System",
     category: "SAFETY \u00b7 IoT",

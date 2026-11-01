@@ -366,7 +366,7 @@ export const WorksPage: React.FC = () => {
                   onClick={() => setSelectedCategory('ALL')}
                   className="font-mono-tech text-xs text-black underline underline-offset-4 font-bold hover:text-[#476800]"
                 >
-                  View All 17 Projects
+                  View All {PROJECTS_DATA.length} Projects
                 </button>
               </div>
             )}

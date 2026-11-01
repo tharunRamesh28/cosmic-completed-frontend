@@ -2,9 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { ArrowRight, CheckCircle2, ShieldCheck, Upload, Send, AlertCircle, Check } from 'lucide-react';
 import { Link, useRouter } from '../router';
 import { supabase } from '../lib/supabase';
+import {
+  ALLOWED_FILE_EXTENSIONS,
+  MAX_FILE_SIZE,
+  validateEmail,
+  validatePhone,
+  validateFile,
+  sanitizeText,
+  checkSubmissionRateLimit,
+  recordSubmissionTimestamp,
+} from '../lib/validators';
 
-const ALLOWED_EXTENSIONS = ['.pdf', '.step', '.stp', '.zip', '.gbr', '.gerber', '.dwg', '.png'];
-const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+const ALLOWED_EXTENSIONS = ALLOWED_FILE_EXTENSIONS as unknown as string[];
 
 export const OrderPage: React.FC = () => {
   const { locationState } = useRouter();
@@ -17,7 +26,7 @@ export const OrderPage: React.FC = () => {
   const [projectName, setProjectName] = useState<string>('');
   const [projectType, setProjectType] = useState<string>('Embedded Systems');
   const [projectDescription, setProjectDescription] = useState<string>('');
-  const [expectedTimeline, setExpectedTimeline] = useState<string>('STANDARD (10–14 Days)');
+  const [expectedTimeline, setExpectedTimeline] = useState<string>('STANDARD (5–8 Days)');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -45,11 +54,11 @@ export const OrderPage: React.FC = () => {
     if (locationState?.selectedSpeed) {
       const speed = locationState.selectedSpeed.toUpperCase();
       if (speed.includes('RAPID')) {
-        setExpectedTimeline('RAPID (7–10 Days)');
+        setExpectedTimeline('RAPID (2–4 Days)');
       } else if (speed.includes('EXTENDED')) {
-        setExpectedTimeline('EXTENDED (14–20 Days)');
+        setExpectedTimeline('EXTENDED (8–10 Days)');
       } else {
-        setExpectedTimeline('STANDARD (10–14 Days)');
+        setExpectedTimeline('STANDARD (5–8 Days)');
       }
     }
   }, [locationState]);
@@ -69,13 +78,9 @@ export const OrderPage: React.FC = () => {
       const filesArray: File[] = Array.from(e.target.files);
 
       for (const file of filesArray) {
-        if (file.size > MAX_FILE_SIZE) {
-          setFormError(`File "${file.name}" exceeds the 50MB size limit.`);
-          return;
-        }
-        const ext = '.' + file.name.split('.').pop()?.toLowerCase();
-        if (!ALLOWED_EXTENSIONS.includes(ext)) {
-          setFormError(`File "${file.name}" has an unsupported format. Allowed: .pdf, .step, .zip, .gbr, .dwg, .png`);
+        const fileCheck = validateFile(file);
+        if (!fileCheck.isValid) {
+          setFormError(fileCheck.error || 'Invalid file format or size.');
           return;
         }
       }
@@ -97,6 +102,16 @@ export const OrderPage: React.FC = () => {
       setFormError('Please provide your email address.');
       return;
     }
+    const emailCheck = validateEmail(email);
+    if (!emailCheck.isValid) {
+      setFormError(emailCheck.error || 'Please enter a valid email address.');
+      return;
+    }
+    const phoneCheck = validatePhone(phone);
+    if (!phoneCheck.isValid) {
+      setFormError(phoneCheck.error || 'Please enter a valid phone number.');
+      return;
+    }
     if (!projectName.trim()) {
       setFormError('Please enter a project name.');
       return;
@@ -110,48 +125,32 @@ export const OrderPage: React.FC = () => {
       return;
     }
 
-    // STEP 2: Email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email.trim())) {
-      setFormError('Please enter a valid email address format.');
-      return;
+    // STEP 2: File validation
+    for (const file of selectedFiles) {
+      const fileCheck = validateFile(file);
+      if (!fileCheck.isValid) {
+        setFormError(fileCheck.error || 'File validation failed.');
+        return;
+      }
     }
 
-    // STEP 3: File validation
-    for (const file of selectedFiles) {
-      if (file.size > MAX_FILE_SIZE) {
-        setFormError(`File "${file.name}" exceeds the 50MB maximum size limit.`);
-        return;
-      }
-      const ext = '.' + file.name.split('.').pop()?.toLowerCase();
-      if (!ALLOWED_EXTENSIONS.includes(ext)) {
-        setFormError(`File "${file.name}" is not an allowed format (.pdf, .step, .zip, .gbr, .dwg, .png).`);
-        return;
-      }
+    // Rate-limit / rapid repeat submission protection
+    const rateCheck = checkSubmissionRateLimit('cc_order_submission_ts', 12000);
+    if (!rateCheck.allowed) {
+      setFormError(`Please wait ${rateCheck.waitSec}s before submitting another brief.`);
+      return;
     }
 
     setSubmitting(true);
 
     try {
-      // DIAGNOSTIC STEP 2: Inspect Google authentication and session immediately before submission
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      // Input sanitization & normalization
-      const sanitizedName = name.trim().slice(0, 100);
+      // Input sanitization & bounds enforcement
+      const sanitizedName = sanitizeText(name, 100);
       const sanitizedEmail = email.trim().toLowerCase().slice(0, 120);
-      const sanitizedPhone = phone.trim().slice(0, 30) || null;
-      const sanitizedCompany = company.trim().slice(0, 100) || null;
-      const sanitizedProjectName = projectName.trim().slice(0, 120);
-      const sanitizedDescription = projectDescription.trim().slice(0, 5000);
-
-      // Client-side rate-limit / spam prevention check
-      const lastSubmissionTime = localStorage.getItem('last_project_submission_ts');
-      if (lastSubmissionTime && Date.now() - parseInt(lastSubmissionTime, 10) < 15000) {
-        setFormError('Please wait a few seconds before submitting another project brief.');
-        setSubmitting(false);
-        return;
-      }
+      const sanitizedPhone = phone.trim() ? sanitizeText(phone, 30) : null;
+      const sanitizedCompany = company.trim() ? sanitizeText(company, 100) : null;
+      const sanitizedProjectName = sanitizeText(projectName, 120);
+      const sanitizedDescription = sanitizeText(projectDescription, 5000);
 
       const {
         data: { user },
@@ -187,7 +186,7 @@ export const OrderPage: React.FC = () => {
         return;
       }
 
-      localStorage.setItem('last_project_submission_ts', Date.now().toString());
+      recordSubmissionTimestamp('cc_order_submission_ts');
 
       // STEP 6: Upload selected files if any were provided
       if (selectedFiles.length > 0) {
@@ -444,9 +443,9 @@ export const OrderPage: React.FC = () => {
                   onChange={(e) => setExpectedTimeline(e.target.value)}
                   className="w-full bg-[#f9faf7] border border-[#c4c7c7] rounded-lg p-3.5 text-sm font-display-tech text-black focus:outline-none focus:border-black font-semibold"
                 >
-                  <option value="RAPID (7–10 Days)">RAPID — 7–10 Days (Quick turnaround)</option>
-                  <option value="STANDARD (10–14 Days)">STANDARD — 10–14 Days (Balanced &amp; recommended)</option>
-                  <option value="EXTENDED (14–20 Days)">EXTENDED — 14–20 Days (Additional testing &amp; refinement)</option>
+                  <option value="RAPID (2–4 Days)">RAPID — 2–4 Days (Quick turnaround)</option>
+                  <option value="STANDARD (5–8 Days)">STANDARD — 5–8 Days (Balanced &amp; recommended)</option>
+                  <option value="EXTENDED (8–10 Days)">EXTENDED — 8–10 Days (Additional testing &amp; refinement)</option>
                   <option value="Custom Scope / Ongoing">Custom Scope / Ongoing Engineering</option>
                 </select>
               </div>

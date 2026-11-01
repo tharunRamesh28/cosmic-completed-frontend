@@ -10,7 +10,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectTier }) 
     {
       id: 'rapid',
       name: 'RAPID',
-      timeline: '7–10 Days',
+      timeline: '2–4 Days',
       description: 'For ideas and projects that need a quick turnaround.',
       deliverables: [
         'Faster development cycle',
@@ -24,7 +24,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectTier }) 
     {
       id: 'standard',
       name: 'STANDARD',
-      timeline: '10–14 Days',
+      timeline: '5–8 Days',
       description: 'For projects requiring a balanced development and testing cycle.',
       deliverables: [
         'Complete implementation',
@@ -38,7 +38,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectTier }) 
     {
       id: 'extended',
       name: 'EXTENDED',
-      timeline: '14–20 Days',
+      timeline: '8–10 Days',
       description: 'For projects that require additional development, testing, or refinement.',
       deliverables: [
         'Detailed implementation',

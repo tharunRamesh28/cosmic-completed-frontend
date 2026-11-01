@@ -6,9 +6,9 @@ interface MobileWheelPickerProps {
 }
 
 // Compact scroll metrics
-const TRAVEL_PER_ITEM = 100; // px scroll per principle transition (3 transitions = 300px)
-const HOLD_DISTANCE = 35;    // px brief hold on principle 04 before clean unpin
-const TOTAL_SCROLL_DISTANCE = 3 * TRAVEL_PER_ITEM + HOLD_DISTANCE; // 335px total scroll travel
+const TRAVEL_PER_ITEM = 130; // px scroll per principle transition (3 transitions = 390px)
+const HOLD_DISTANCE = 40;    // px brief hold on principle 04 before clean unpin
+const TOTAL_SCROLL_DISTANCE = 3 * TRAVEL_PER_ITEM + HOLD_DISTANCE; // 430px total scroll travel
 
 export const MobileWheelPicker: React.FC<MobileWheelPickerProps> = ({
   reducedMotion: propReducedMotion = false,
@@ -48,8 +48,8 @@ export const MobileWheelPicker: React.FC<MobileWheelPickerProps> = ({
     const updateDimensions = () => {
       if (typeof window !== 'undefined') {
         const vh = window.innerHeight;
-        // Available space below 58px header and 72px heading:
-        const calculatedStage = Math.max(320, Math.min(390, Math.round(vh * 0.44)));
+        // Ample stage room for active description + clean clearance of adjacent items
+        const calculatedStage = Math.max(380, Math.min(460, Math.round(vh * 0.52)));
         setStageHeight(calculatedStage);
 
         if (stickyRef.current) {
@@ -217,8 +217,8 @@ export const MobileWheelPicker: React.FC<MobileWheelPickerProps> = ({
   }
 
   // Visual center Y for the active principle within the wheel stage
-  // Positioned at ~38% of stage height so that Title + expanded Description are balanced
-  const centerY = Math.round(stageHeight * 0.38);
+  // Positioned at ~30% of stage height so that Title + expanded Description have full room below
+  const centerY = Math.round(stageHeight * 0.30);
 
   // Wheel Items Geometry
   const itemsGeometry = VALUE_PROPOSITIONS.map((item, idx) => {
@@ -227,25 +227,26 @@ export const MobileWheelPicker: React.FC<MobileWheelPickerProps> = ({
     const isCenterActive = absDelta < 0.42;
     const isVisible = absDelta < 1.45;
 
-    // Displacement along the wheel:
-    // When delta < 0 (item is above active): spacing is ~70px
-    // When delta > 0 (item is below active): spacing is ~110px to account for the open active description
+    // Dynamic, content-aware vertical displacement:
+    // When delta < 0 (item is above active): spacing is ~75px
+    // When delta > 0 (item is below active): spacing is 165px minimum, providing 24-30px
+    // clear breathing room below the complete multi-line description of the active principle.
     let displacementY = 0;
     if (delta < 0) {
-      displacementY = delta * 70;
+      displacementY = delta * 75;
     } else {
-      displacementY = delta * 110;
+      displacementY = delta * 165;
     }
 
     // Scale decreases gently with distance from center
     const scale = Math.max(0.88, 1.0 - Math.min(0.12, absDelta * 0.08));
 
-    // Opacity: center is 1.0; adjacent item is ~0.60; distant items fade smoothly
+    // Opacity: center is 1.0; adjacent item is ~0.55; distant items fade smoothly
     const opacity = isCenterActive
       ? 1.0
       : !isVisible
       ? 0
-      : Math.max(0.2, 1.0 - (absDelta - 0.42) * 0.75);
+      : Math.max(0.2, 1.0 - (absDelta - 0.42) * 0.8);
 
     return {
       item,
@@ -431,11 +432,11 @@ export const MobileWheelPicker: React.FC<MobileWheelPickerProps> = ({
                       <div
                         className={`overflow-hidden pl-4 sm:pl-4 transition-all duration-300 ${
                           isCenterActive
-                            ? 'opacity-100 max-h-28 mt-1.5'
-                            : 'opacity-0 max-h-0 mt-0 pointer-events-none'
+                            ? 'opacity-100 max-h-40 mt-2 mb-2'
+                            : 'opacity-0 max-h-0 mt-0 mb-0 pointer-events-none'
                         }`}
                       >
-                        <p className="text-[13px] sm:text-sm text-[#262827] leading-relaxed font-normal max-w-sm">
+                        <p className="text-[13px] sm:text-sm text-[#262827] leading-[1.65] font-normal max-w-sm">
                           {item.description}
                         </p>
                       </div>
