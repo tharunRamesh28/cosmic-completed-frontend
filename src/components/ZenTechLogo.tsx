@@ -3,7 +3,7 @@ import React from 'react';
 interface LogoProps {
   isDarkBg?: boolean;
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   showIcon?: boolean;
 }
 
@@ -22,19 +22,23 @@ export const ZenTechLogo: React.FC<LogoProps> = ({
   size = 'md',
   showIcon = true,
 }) => {
-  // Increased the robotic Z logo mark by 30% while keeping header compact
+  // Icon sizing with dramatic, ultra-clear presence on lg & xl
   const iconSizeClasses =
     size === 'sm'
       ? 'w-10 h-10 sm:w-11 sm:h-11'
+      : size === 'xl'
+      ? 'w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44'
       : size === 'lg'
-      ? 'w-20 h-20 sm:w-24 sm:h-24'
+      ? 'w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36'
       : 'w-13 h-13 sm:w-14 sm:h-14 md:w-[60px] md:h-[60px]';
 
   const verticalBarHeight =
     size === 'sm'
       ? 'clamp(22px, 4vw, 26px)'
+      : size === 'xl'
+      ? 'clamp(64px, 12vw, 92px)'
       : size === 'lg'
-      ? 'clamp(38px, 6vw, 46px)'
+      ? 'clamp(52px, 9vw, 72px)'
       : 'clamp(28px, 4.2vw, 36px)';
 
   const zenColor = isDarkBg ? '#FFFFFF' : '#080808';
@@ -78,8 +82,10 @@ export const ZenTechLogo: React.FC<LogoProps> = ({
             fontSize:
               size === 'sm'
                 ? 'clamp(0.8rem, 1.8vw, 0.95rem)'
+                : size === 'xl'
+                ? 'clamp(2.4rem, 5.5vw, 3.8rem)'
                 : size === 'lg'
-                ? 'clamp(1.2rem, 3vw, 1.7rem)'
+                ? 'clamp(1.9rem, 4.2vw, 2.9rem)'
                 : 'clamp(0.95rem, 2.1vw, 1.2rem)',
             lineHeight: 0.95,
             letterSpacing: '0.02em',
@@ -128,8 +134,10 @@ export const ZenTechLogo: React.FC<LogoProps> = ({
               fontSize:
                 size === 'sm'
                   ? 'clamp(0.38rem, 0.9vw, 0.45rem)'
+                  : size === 'xl'
+                  ? 'clamp(1rem, 2.2vw, 1.45rem)'
                   : size === 'lg'
-                  ? 'clamp(0.55rem, 1.2vw, 0.68rem)'
+                  ? 'clamp(0.8rem, 1.8vw, 1.15rem)'
                   : 'clamp(0.42rem, 0.95vw, 0.52rem)',
               letterSpacing: '0.34em',
               marginRight: '-0.34em', // Offsets trailing space so it centers exactly
