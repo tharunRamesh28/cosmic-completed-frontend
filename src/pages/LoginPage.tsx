@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useRouter } from '../router';
+import { ZenTechLogo } from '../components/ZenTechLogo';
 
 export const LoginPage: React.FC = () => {
   const { navigate } = useRouter();
@@ -131,18 +132,10 @@ export const LoginPage: React.FC = () => {
             e.preventDefault();
             navigate('/');
           }}
-          className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+          className="hover:opacity-85 transition-opacity"
+          title="Zen Tech Solutions"
         >
-          <img 
-            src="/zen_tech_icon.jpg" 
-            alt="Zen Tech Solutions" 
-            className="w-7 h-7 object-contain rounded-md shrink-0"
-          />
-          <img
-            src="/zen_tech_wordmark.png"
-            alt="ZEN TECH SOLUTIONS"
-            className="h-6 w-auto object-contain"
-          />
+          <ZenTechLogo isDarkBg={false} size="sm" />
         </a>
 
         <button
@@ -160,12 +153,8 @@ export const LoginPage: React.FC = () => {
           
           {/* Header Branding */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center p-2 rounded-xl bg-white border border-[#e2e4de] mb-4 shadow-xs">
-              <img 
-                src="/zen_tech_full_logo.jpg" 
-                alt="Zen Tech Solutions" 
-                className="h-12 object-contain"
-              />
+            <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-white border border-[#e2e4de] mb-4 shadow-xs">
+              <ZenTechLogo isDarkBg={false} size="md" />
             </div>
 
             <h1 className="font-display-tech text-2xl sm:text-3xl font-black tracking-tight text-black">

@@ -4,6 +4,7 @@ import { Shield, Lock, Mail, User, ArrowRight, AlertCircle, CheckCircle2 } from 
 import { supabase } from '../lib/supabase';
 import { useRouter, Link } from '../router';
 import { validateEmail } from '../lib/validators';
+import { ZenTechLogo } from '../components/ZenTechLogo';
 
 export const SignupPage: React.FC = () => {
   const { navigate } = useRouter();
@@ -108,18 +109,9 @@ export const SignupPage: React.FC = () => {
 
       {/* Top Bar */}
       <div className="relative z-20 w-full max-w-5xl mx-auto px-6 pt-8 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <img 
-            src="/zen_tech_icon.jpg" 
-            alt="Zen Tech Solutions" 
-            className="w-6 h-6 object-contain rounded-md shrink-0"
-          />
-          <img
-            src="/zen_tech_wordmark.png"
-            alt="Zen Tech Solutions"
-            className="h-5 w-auto object-contain bg-white rounded px-1 py-0.5"
-          />
-        </div>
+        <Link to="/" className="hover:opacity-85 transition-opacity" title="Zen Tech Solutions">
+          <ZenTechLogo isDarkBg={true} size="sm" />
+        </Link>
 
         <Link
           to="/login"

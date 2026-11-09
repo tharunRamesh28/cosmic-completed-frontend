@@ -2,6 +2,7 @@ import React from 'react';
 import { CursorGrid } from './CursorGrid';
 import { Share2, Terminal, Shield, ArrowUpRight } from 'lucide-react';
 import { Link, useRouter } from '../router';
+import { ZenTechLogo } from './ZenTechLogo';
 
 interface FooterProps {
   onStartProject?: () => void;
@@ -61,18 +62,10 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
             <div>
               <Link
                 to="/"
-                className="flex items-center gap-2.5 hover:opacity-90"
+                className="inline-flex items-center hover:opacity-90 transition-opacity"
+                title="Zen Tech Solutions"
               >
-                <img 
-                  src="/zen_tech_icon.jpg" 
-                  alt="Zen Tech Solutions Logo" 
-                  className="w-9 h-9 object-contain rounded-md bg-white p-0.5 shrink-0"
-                />
-                <img
-                  src="/zen_tech_wordmark.png"
-                  alt="ZEN TECH SOLUTIONS"
-                  className="h-8 w-auto object-contain bg-white rounded-md px-1.5 py-0.5"
-                />
+                <ZenTechLogo isDarkBg={true} size="sm" />
               </Link>
               <p className="font-mono-tech text-xs text-neutral-400 mt-2">
                 High-End Technical Minimalism
@@ -165,14 +158,12 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
           </div>
         </div>
 
-        {/* Large Brand Typography with Green Gradient in Black Area */}
+        {/* Large Brand Centerpiece Banner */}
         <div className="pt-8 pb-4 sm:pt-10 sm:pb-6 border-t border-neutral-800/80 flex flex-col items-center justify-center text-center">
-          <div className="flex flex-col items-center gap-4 mb-2">
-            <img 
-              src="/zen_tech_full_logo.jpg" 
-              alt="Zen Tech Solutions" 
-              className="max-h-20 sm:max-h-28 md:max-h-36 object-contain rounded-xl shadow-2xl bg-white p-2 sm:p-3"
-            />
+          <div className="flex flex-col items-center gap-4 mb-3">
+            <div className="bg-white px-6 sm:px-10 py-4 sm:py-6 rounded-2xl shadow-[0_0_50px_rgba(107,197,3,0.18)] border border-neutral-200">
+              <ZenTechLogo isDarkBg={false} size="lg" />
+            </div>
           </div>
           <span className="font-mono-tech text-[10px] sm:text-xs text-[#c8f179]/90 tracking-[0.25em] uppercase font-bold mt-2">
             END-TO-END PRODUCT ENGINEERING STUDIO
