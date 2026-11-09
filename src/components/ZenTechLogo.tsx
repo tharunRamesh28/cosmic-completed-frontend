@@ -49,7 +49,22 @@ export const ZenTechLogo: React.FC<LogoProps> = ({
         />
       )}
 
-      {/* 2. Text Hierarchy Container (Positioned close to the logo without center line) */}
+      {/* 2. Vertical separator line: Exactly 42–48px tall on desktop, vertically centered to ZEN TECH SOLUTIONS */}
+      <span
+        className="w-[2px] sm:w-[2.5px] rounded-full shrink-0 transition-colors duration-300"
+        style={{
+          height:
+            size === 'sm'
+              ? 'clamp(28px, 6vw, 36px)'
+              : size === 'lg'
+              ? 'clamp(48px, 8vw, 64px)'
+              : 'clamp(32px, 5.5vw, 45px)', // ~42-45px on desktop, scaling smoothly on mobile
+          backgroundColor: lineColor,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* 3. Text Hierarchy Container */}
       <div className="flex flex-col justify-center leading-none tracking-tight">
         {/* Row 1: ZEN TECH (Aligned directly centered and straight over SOLUTIONS) */}
         <div
