@@ -121,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
             : 'bg-[#f9faf7]/90 text-[#191c1b] border-b border-[#c4c7c7]/30 backdrop-blur-md'
           }`}
       >
-        <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-16 py-2.5 sm:py-3.5 md:py-4 max-w-[1440px] mx-auto">
+        <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-16 py-1.5 sm:py-2 md:py-2.5 max-w-[1440px] mx-auto">
           {/* Logo */}
           <a
             href="/"
