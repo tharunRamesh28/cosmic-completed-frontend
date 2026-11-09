@@ -3,6 +3,7 @@ import { Menu, X, LogOut, User as UserIcon, ClipboardList } from 'lucide-react';
 import { useRouter } from '../router';
 import { useAuth } from '../lib/AuthContext';
 import { motion, useMotionValue, useSpring, useTransform, MotionValue } from 'motion/react';
+import { ZenTechLogo } from './ZenTechLogo';
 
 const MagnifyHeaderItem: React.FC<{
   children: React.ReactNode;
@@ -128,21 +129,11 @@ export const Header: React.FC<HeaderProps> = ({
               e.preventDefault();
               navigate('/');
             }}
-            className="flex items-center gap-2.5 sm:gap-3 transition-opacity duration-300 hover:opacity-85"
+            className="transition-opacity duration-300 hover:opacity-85 py-1"
             id="header-logo"
+            title="Zen Tech Solutions"
           >
-            <img 
-              src="/zen_tech_icon.jpg" 
-              alt="Zen Tech Solutions Logo" 
-              className="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-md shrink-0"
-            />
-            <img
-              src="/zen_tech_wordmark.png"
-              alt="ZEN TECH SOLUTIONS"
-              className={`h-6 sm:h-7 md:h-8 w-auto object-contain ${
-                isCircuitShaderActive ? 'brightness-0 invert' : ''
-              }`}
-            />
+            <ZenTechLogo isDarkBg={isCircuitShaderActive} />
           </a>
 
           {/* Top-Right Area: User actions and menu button */}
@@ -263,18 +254,10 @@ export const Header: React.FC<HeaderProps> = ({
                   handleClose();
                   navigate('/');
                 }}
-                className="flex items-center gap-2.5 sm:gap-3 hover:opacity-85 transition-opacity"
+                className="hover:opacity-85 transition-opacity py-1"
+                title="Zen Tech Solutions"
               >
-                <img 
-                  src="/zen_tech_icon.jpg" 
-                  alt="Zen Tech Solutions Logo" 
-                  className="w-8 h-8 object-contain rounded-md shrink-0"
-                />
-                <img
-                  src="/zen_tech_wordmark.png"
-                  alt="ZEN TECH SOLUTIONS"
-                  className="h-7 sm:h-8 w-auto object-contain"
-                />
+                <ZenTechLogo isDarkBg={false} />
               </a>
 
               <button

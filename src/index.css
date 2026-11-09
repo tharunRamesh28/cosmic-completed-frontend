@@ -4,6 +4,7 @@
   :root {
     --font-hanken: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-jetbrains: 'JetBrains Mono', monospace;
+    --font-exo: 'Exo 2', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   body {
@@ -11,6 +12,10 @@
     background-color: #f9faf7;
     color: #191c1b;
   }
+}
+
+.font-logo-exo {
+  font-family: var(--font-exo);
 }
 
 .font-mono-tech {
