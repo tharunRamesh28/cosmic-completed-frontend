@@ -136,11 +136,13 @@ export const LoginPage: React.FC = () => {
           <img 
             src="/zen_tech_icon.jpg" 
             alt="Zen Tech Solutions" 
-            className="w-7 h-7 object-contain rounded-md"
+            className="w-7 h-7 object-contain rounded-md shrink-0"
           />
-          <span className="font-display-tech text-base font-extrabold tracking-tight text-black">
-            ZEN TECH <span className="text-[#476800] font-semibold">SOLUTIONS</span>
-          </span>
+          <img
+            src="/zen_tech_wordmark.png"
+            alt="ZEN TECH SOLUTIONS"
+            className="h-6 w-auto object-contain"
+          />
         </a>
 
         <button

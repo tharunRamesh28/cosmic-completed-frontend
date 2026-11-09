@@ -75,11 +75,13 @@ export const ForgotPasswordPage: React.FC = () => {
           <img 
             src="/zen_tech_icon.jpg" 
             alt="Zen Tech Solutions" 
-            className="w-6 h-6 object-contain rounded-md"
+            className="w-6 h-6 object-contain rounded-md shrink-0"
           />
-          <span className="font-display-tech text-sm font-extrabold tracking-tight text-white uppercase">
-            Zen Tech Solutions
-          </span>
+          <img
+            src="/zen_tech_wordmark.png"
+            alt="Zen Tech Solutions"
+            className="h-5 w-auto object-contain bg-white rounded px-1 py-0.5"
+          />
         </div>
 
         <Link

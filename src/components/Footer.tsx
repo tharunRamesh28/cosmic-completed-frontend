@@ -61,14 +61,18 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
             <div>
               <Link
                 to="/"
-                className="font-display-tech text-2xl md:text-3xl font-bold tracking-tight text-white flex items-center gap-2.5 hover:opacity-90"
+                className="flex items-center gap-2.5 hover:opacity-90"
               >
                 <img 
                   src="/zen_tech_icon.jpg" 
                   alt="Zen Tech Solutions Logo" 
-                  className="w-9 h-9 object-contain rounded-md bg-white p-0.5"
+                  className="w-9 h-9 object-contain rounded-md bg-white p-0.5 shrink-0"
                 />
-                <span className="font-extrabold tracking-tight">ZEN TECH <span className="text-[#c8f179]">SOLUTIONS</span></span>
+                <img
+                  src="/zen_tech_wordmark.png"
+                  alt="ZEN TECH SOLUTIONS"
+                  className="h-8 w-auto object-contain bg-white rounded-md px-1.5 py-0.5"
+                />
               </Link>
               <p className="font-mono-tech text-xs text-neutral-400 mt-2">
                 High-End Technical Minimalism

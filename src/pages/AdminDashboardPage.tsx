@@ -343,13 +343,17 @@ function formatFileSize(bytes: number | null): string {
         <div>
           {/* Logo Brand */}
           <div className="p-6 border-b border-[#c4c7c7]/40 flex items-center gap-2.5">
-            <img 
-              src="/zen_tech_icon.jpg" 
-              alt="Zen Tech Solutions" 
-              className="w-7 h-7 object-contain rounded-md"
-            />
-            <Link to="/" className="font-display-tech text-base font-black tracking-tight text-black hover:opacity-85">
-              ZEN TECH <span className="text-[#476800] font-semibold">SOLUTIONS</span>
+            <Link to="/" className="flex items-center gap-2 hover:opacity-85">
+              <img 
+                src="/zen_tech_icon.jpg" 
+                alt="Zen Tech Solutions" 
+                className="w-7 h-7 object-contain rounded-md shrink-0"
+              />
+              <img
+                src="/zen_tech_wordmark.png"
+                alt="ZEN TECH SOLUTIONS"
+                className="h-6 w-auto object-contain"
+              />
             </Link>
           </div>
 
@@ -469,13 +473,17 @@ function formatFileSize(bytes: number | null): string {
           <div className="relative w-64 bg-white border-r border-[#c4c7c7] flex flex-col justify-between p-4 z-10 animate-in slide-in-from-left duration-200">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-[#c4c7c7]/50 mb-4">
-                <div className="flex items-center gap-2 font-display-tech font-black text-base text-black">
+                <div className="flex items-center gap-2">
                   <img 
                     src="/zen_tech_icon.jpg" 
                     alt="Zen Tech Solutions" 
-                    className="w-6 h-6 object-contain rounded-md"
+                    className="w-6 h-6 object-contain rounded-md shrink-0"
                   />
-                  <span>Zen Tech Solutions</span>
+                  <img
+                    src="/zen_tech_wordmark.png"
+                    alt="ZEN TECH SOLUTIONS"
+                    className="h-5 w-auto object-contain"
+                  />
                 </div>
                 <button
                   onClick={() => setIsMobileSidebarOpen(false)}

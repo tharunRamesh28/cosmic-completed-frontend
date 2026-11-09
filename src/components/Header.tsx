@@ -128,16 +128,21 @@ export const Header: React.FC<HeaderProps> = ({
               e.preventDefault();
               navigate('/');
             }}
-            className={`font-display-tech text-xl sm:text-2xl font-bold tracking-tight transition-opacity duration-300 hover:opacity-85 flex items-center gap-2.5 ${isCircuitShaderActive ? 'text-white' : 'text-[#000000]'
-              }`}
+            className="flex items-center gap-2.5 sm:gap-3 transition-opacity duration-300 hover:opacity-85"
             id="header-logo"
           >
             <img 
               src="/zen_tech_icon.jpg" 
               alt="Zen Tech Solutions Logo" 
-              className="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-md"
+              className="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-md shrink-0"
             />
-            <span className="font-extrabold tracking-tight">ZEN TECH <span className="text-[#476800] font-semibold">SOLUTIONS</span></span>
+            <img
+              src="/zen_tech_wordmark.png"
+              alt="ZEN TECH SOLUTIONS"
+              className={`h-6 sm:h-7 md:h-8 w-auto object-contain ${
+                isCircuitShaderActive ? 'brightness-0 invert' : ''
+              }`}
+            />
           </a>
 
           {/* Top-Right Area: User actions and menu button */}
@@ -258,14 +263,18 @@ export const Header: React.FC<HeaderProps> = ({
                   handleClose();
                   navigate('/');
                 }}
-                className="font-display-tech text-2xl font-bold tracking-tight text-[#000000] flex items-center gap-2.5 hover:opacity-85 transition-opacity"
+                className="flex items-center gap-2.5 sm:gap-3 hover:opacity-85 transition-opacity"
               >
                 <img 
                   src="/zen_tech_icon.jpg" 
                   alt="Zen Tech Solutions Logo" 
-                  className="w-8 h-8 object-contain rounded-md"
+                  className="w-8 h-8 object-contain rounded-md shrink-0"
                 />
-                <span className="font-extrabold tracking-tight">ZEN TECH <span className="text-[#476800] font-semibold">SOLUTIONS</span></span>
+                <img
+                  src="/zen_tech_wordmark.png"
+                  alt="ZEN TECH SOLUTIONS"
+                  className="h-7 sm:h-8 w-auto object-contain"
+                />
               </a>
 
               <button
