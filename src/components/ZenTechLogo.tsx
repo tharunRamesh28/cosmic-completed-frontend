@@ -22,19 +22,13 @@ export const ZenTechLogo: React.FC<LogoProps> = ({
   size = 'md',
   showIcon = true,
 }) => {
+  // Scaled an additional ~30% larger, making the robot icon dominant and impactful
   const iconSizeClasses =
     size === 'sm'
-      ? 'w-9 h-9 sm:w-10 sm:h-10'
+      ? 'w-14 h-14 sm:w-16 sm:h-16'
       : size === 'lg'
-      ? 'w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20'
-      : 'w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14';
-
-  const verticalBarClasses =
-    size === 'sm'
-      ? 'h-8 sm:h-9 w-[2px]'
-      : size === 'lg'
-      ? 'h-12 sm:h-14 md:h-16 w-[2.5px] sm:w-[3px]'
-      : 'h-9 sm:h-10 md:h-11 w-[2px] sm:w-[2.5px]';
+      ? 'w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36'
+      : 'w-[72px] h-[72px] sm:w-20 sm:h-20 md:w-24 md:h-24';
 
   const zenColor = isDarkBg ? '#FFFFFF' : '#080808';
   const techColor = '#6BC503';
@@ -43,26 +37,19 @@ export const ZenTechLogo: React.FC<LogoProps> = ({
 
   return (
     <div
-      className={`inline-flex items-center gap-3 sm:gap-4 select-none ${className}`}
+      className={`inline-flex items-center gap-2 sm:gap-2.5 md:gap-3 select-none ${className}`}
       aria-label="Zen Tech Solutions Logo"
     >
-      {/* 1. Prominent Robotic 'Z' Logo Mark (Scaled larger than name, crystal clear) */}
+      {/* 1. Large Robotic 'Z' Logo Mark (Scaled +30% larger, crystal clear) */}
       {showIcon && (
         <img
           src="/zen_tech_robot_z.png"
           alt="Zen Tech Robotic Z Logo"
-          className={`${iconSizeClasses} object-contain shrink-0`}
+          className={`${iconSizeClasses} object-contain shrink-0 drop-shadow-xs`}
         />
       )}
 
-      {/* 2. Left Thin Vertical Divider Line */}
-      <span
-        className={`shrink-0 rounded-full transition-colors duration-300 ${verticalBarClasses}`}
-        style={{ backgroundColor: lineColor }}
-        aria-hidden="true"
-      />
-
-      {/* 3. Text Hierarchy Container */}
+      {/* 2. Text Hierarchy Container (Positioned close to the logo without center line) */}
       <div className="flex flex-col justify-center leading-none tracking-tight">
         {/* Row 1: ZEN TECH (Aligned directly centered and straight over SOLUTIONS) */}
         <div
@@ -125,7 +112,7 @@ export const ZenTechLogo: React.FC<LogoProps> = ({
                   ? 'clamp(0.65rem, 1.4vw, 0.8rem)'
                   : 'clamp(0.48rem, 1.1vw, 0.6rem)',
               letterSpacing: '0.34em',
-              marginRight: '-0.34em', // Offsets the trailing space so it centers exactly
+              marginRight: '-0.34em', // Offsets trailing space so it centers exactly
               lineHeight: 1,
             }}
           >
