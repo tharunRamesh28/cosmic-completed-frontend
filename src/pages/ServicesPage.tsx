@@ -7,7 +7,7 @@ import smartDripImg from '../assets/smartdrip_plus.jpg';
 import roboticsImg from '../assets/robotics_roverflow.jpg';
 import cadImg from '../assets/cad_design_box.jpg';
 import homeAutomationImg from '../../projects/Automatic Home Automation System.png';
-import smartEnergyImg from '../../projects/SMART ENERGY MONITORING & AUTOMATIC LIGHTING.png';
+import smartEnergyImg from '../../projects/Smart energy monitoring & automatic lighting.png';
 import webDevImg from '../assets/web_development.png';
 
 interface CompactService {

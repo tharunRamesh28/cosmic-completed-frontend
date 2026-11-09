@@ -27,10 +27,10 @@ import projectImg_04 from '../../projects/Smart Flood Detection & Early Warning 
 import projectImg_05 from '../../projects/Color Detection & Identification System using ESP32-CAM.png';
 import projectImg_06 from '../../projects/Automatic Fire Fighting System.png';
 import projectImg_07 from '../../projects/Automatic Home Automation System.png';
-import projectImg_08 from '../../projects/Chill Chain – Smart Milk Quality & Vendor Tracking System.png';
+import projectImg_08 from '../../projects/Chill Chain - Smart Milk Quality & Vendor Tracking System.png';
 import projectImg_09 from '../../projects/Smart air quality & multi-gas monitoring system.png';
-import projectImg_10 from '../../projects/SMART AUTOMATIC CLOTHES COLLECTOR SYSTEM.png';
-import projectImg_11 from '../../projects/SMART ENERGY MONITORING & AUTOMATIC LIGHTING.png';
+import projectImg_10 from '../../projects/Smart automatic clothes collector system.png';
+import projectImg_11 from '../../projects/Smart energy monitoring & automatic lighting.png';
 import projectImg_12 from '../../projects/Smart Irrigation System.png';
 import projectImg_13 from '../../projects/Smart Parking Management System.png';
 import projectImg_14 from '../../projects/Smart Patient Bed Fall Detection & Alert System.png';
