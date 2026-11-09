@@ -5,8 +5,6 @@ import { ScrollReveal } from '../components/ScrollReveal';
 
 import karthikPhoto from '../../projects/members/karthik.png';
 import tharunPhoto from '../../projects/members/tharun.png';
-import cooPhoto from '../../projects/members/coo.png';
-import cpoPhoto from '../../projects/members/cpo.png';
 
 export const AboutPage: React.FC = () => {
   const expertiseList = [
@@ -31,7 +29,7 @@ export const AboutPage: React.FC = () => {
       }
     },
     {
-      name: 'Tharun ',
+      name: 'Tharun',
       role: 'CO-FOUNDER & CTO',
       description: 'IoT Engineer, Full Stack Developer, Problem Solver',
       image: tharunPhoto,
@@ -40,20 +38,6 @@ export const AboutPage: React.FC = () => {
         linkedin: 'https://www.linkedin.com/in/tharun-ramesh25',
         email: 'mailto:rameshtharun067@gmail.com'
       }
-    },
-    {
-      name: 'Arjun Mehta',
-      role: 'COO',
-      description: 'Operations, Product Strategy and Business Development',
-      image: cooPhoto,
-      socials: {}
-    },
-    {
-      name: 'Rahul Sharma',
-      role: 'CPO',
-      description: 'Product Design, Innovation and Technology Strategy',
-      image: cpoPhoto,
-      socials: {}
     }
   ];
 
@@ -119,8 +103,8 @@ export const AboutPage: React.FC = () => {
             </p>
           </div>
 
-          {/* 3-column responsive grid on desktop; fourth card flows naturally to second row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-[1100px] mx-auto">
+          {/* 2-column balanced grid on desktop for Leadership */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-4xl mx-auto">
             {teamMembers.map((member) => (
               <div
                 key={member.name}
@@ -139,33 +123,33 @@ export const AboutPage: React.FC = () => {
                 </div>
 
                 {/* Information & Social Navigation Icons */}
-                <div className="p-4 flex flex-col justify-between flex-grow">
+                <div className="p-5 flex flex-col justify-between flex-grow">
                   <div>
-                    <h3 className="font-display-tech text-base font-bold text-[#000000] mb-0.5">
+                    <h3 className="font-display-tech text-lg font-bold text-[#000000] mb-0.5">
                       {member.name}
                     </h3>
-                    <div className="font-mono-tech text-[11px] text-[#74a81e] font-semibold mb-1.5">
+                    <div className="font-mono-tech text-xs text-[#74a81e] font-semibold mb-2">
                       {member.role}
                     </div>
                     {member.description && (
-                      <p className="font-display-tech text-xs text-[#444748] leading-relaxed">
+                      <p className="font-display-tech text-sm text-[#444748] leading-relaxed">
                         {member.description}
                       </p>
                     )}
                   </div>
 
                   {/* Social Navigation Icons at bottom of card */}
-                  {(member.socials.instagram || member.socials.linkedin || member.socials.email) ? (
-                    <div className="flex items-center gap-2 pt-3 mt-3 border-t border-[#c4c7c7]/30">
+                  {(member.socials.instagram || member.socials.linkedin || member.socials.email) && (
+                    <div className="flex items-center gap-2 pt-4 mt-4 border-t border-[#c4c7c7]/30">
                       {member.socials.instagram && (
                         <a
                           href={member.socials.instagram}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-7 h-7 rounded-md border border-[#c4c7c7]/60 bg-[#f9faf7] flex items-center justify-center text-[#444748] hover:text-[#000000] hover:bg-[#c8f179]/20 hover:border-[#476800] transition-colors"
+                          className="w-8 h-8 rounded-md border border-[#c4c7c7]/60 bg-[#f9faf7] flex items-center justify-center text-[#444748] hover:text-[#000000] hover:bg-[#c8f179]/20 hover:border-[#476800] transition-colors"
                           title={`${member.name} on Instagram`}
                         >
-                          <Instagram className="w-3.5 h-3.5" />
+                          <Instagram className="w-4 h-4" />
                         </a>
                       )}
                       {member.socials.linkedin && (
@@ -173,27 +157,21 @@ export const AboutPage: React.FC = () => {
                           href={member.socials.linkedin}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-7 h-7 rounded-md border border-[#c4c7c7]/60 bg-[#f9faf7] flex items-center justify-center text-[#444748] hover:text-[#000000] hover:bg-[#c8f179]/20 hover:border-[#476800] transition-colors"
+                          className="w-8 h-8 rounded-md border border-[#c4c7c7]/60 bg-[#f9faf7] flex items-center justify-center text-[#444748] hover:text-[#000000] hover:bg-[#c8f179]/20 hover:border-[#476800] transition-colors"
                           title={`${member.name} on LinkedIn`}
                         >
-                          <Linkedin className="w-3.5 h-3.5" />
+                          <Linkedin className="w-4 h-4" />
                         </a>
                       )}
                       {member.socials.email && (
                         <a
                           href={member.socials.email}
-                          className="w-7 h-7 rounded-md border border-[#c4c7c7]/60 bg-[#f9faf7] flex items-center justify-center text-[#444748] hover:text-[#000000] hover:bg-[#c8f179]/20 hover:border-[#476800] transition-colors"
+                          className="w-8 h-8 rounded-md border border-[#c4c7c7]/60 bg-[#f9faf7] flex items-center justify-center text-[#444748] hover:text-[#000000] hover:bg-[#c8f179]/20 hover:border-[#476800] transition-colors"
                           title={`Email ${member.name}`}
                         >
-                          <Mail className="w-3.5 h-3.5" />
+                          <Mail className="w-4 h-4" />
                         </a>
                       )}
-                    </div>
-                  ) : (
-                    <div className="pt-3 mt-3 border-t border-[#c4c7c7]/30">
-                      <span className="font-mono-tech text-[10px] text-[#74a81e] font-semibold">
-                        ZEN TECH SOLUTIONS LEADERSHIP
-                      </span>
                     </div>
                   )}
                 </div>
