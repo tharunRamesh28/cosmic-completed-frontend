@@ -126,7 +126,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ slug: prop
             {/* Engineering Badge */}
             <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 flex items-center gap-2 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-[#e2e4de] text-[#476800] font-mono-tech text-xs font-bold shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#476800] animate-pulse" />
-              <span>COSMIC CIRCUIT // REAL PROTOTYPE HARDWARE</span>
+              <span>ZEN TECH SOLUTIONS // REAL PROTOTYPE HARDWARE</span>
             </div>
           </div>
         </ScrollReveal>

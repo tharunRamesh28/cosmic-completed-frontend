@@ -507,7 +507,7 @@ export const DesktopHero: React.FC<DesktopHeroProps> = ({ onStartProject }) => {
                 </span>
               </div>
               <h2 className="font-display-tech text-3xl lg:text-4xl xl:text-[42px] font-extrabold text-[#000000] tracking-tight">
-                WHY CHOOSE <span className="text-[#476800]">COSMIC CIRCUIT</span>?
+                WHY CHOOSE <span className="text-[#476800]">ZEN TECH SOLUTIONS</span>?
               </h2>
             </div>
 

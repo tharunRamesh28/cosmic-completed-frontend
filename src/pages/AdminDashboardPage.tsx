@@ -343,9 +343,13 @@ function formatFileSize(bytes: number | null): string {
         <div>
           {/* Logo Brand */}
           <div className="p-6 border-b border-[#c4c7c7]/40 flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 bg-[#c8f179] rounded-sm inline-block shadow-[0_0_10px_#c8f179]" />
-            <Link to="/" className="font-display-tech text-lg font-black tracking-tight text-black hover:opacity-85">
-              Cosmic Circuit
+            <img 
+              src="/zen_tech_icon.jpg" 
+              alt="Zen Tech Solutions" 
+              className="w-7 h-7 object-contain rounded-md"
+            />
+            <Link to="/" className="font-display-tech text-base font-black tracking-tight text-black hover:opacity-85">
+              ZEN TECH <span className="text-[#476800] font-semibold">SOLUTIONS</span>
             </Link>
           </div>
 
@@ -438,7 +442,7 @@ function formatFileSize(bytes: number | null): string {
                 {adminUser?.user_metadata?.full_name || 'Administrator'}
               </div>
               <div className="font-mono-tech text-[10px] text-neutral-400 truncate">
-                {adminUser?.email || 'admin@cosmiccircuit'}
+                {adminUser?.email || 'admin@zentechsolutions.com'}
               </div>
             </div>
           </div>
@@ -466,8 +470,12 @@ function formatFileSize(bytes: number | null): string {
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-[#c4c7c7]/50 mb-4">
                 <div className="flex items-center gap-2 font-display-tech font-black text-base text-black">
-                  <span className="w-2.5 h-2.5 bg-[#c8f179] rounded-sm inline-block shadow-[0_0_10px_#c8f179]" />
-                  <span>Cosmic Circuit</span>
+                  <img 
+                    src="/zen_tech_icon.jpg" 
+                    alt="Zen Tech Solutions" 
+                    className="w-6 h-6 object-contain rounded-md"
+                  />
+                  <span>Zen Tech Solutions</span>
                 </div>
                 <button
                   onClick={() => setIsMobileSidebarOpen(false)}
@@ -662,7 +670,7 @@ function formatFileSize(bytes: number | null): string {
                     CONTROL CENTER
                   </h2>
                   <p className="text-xs text-neutral-500 mt-1">
-                    Real-time operational telemetry and client project submissions for Cosmic Circuit.
+                    Real-time operational telemetry and client project submissions for Zen Tech Solutions.
                   </p>
                 </div>
                 <button
@@ -833,7 +841,7 @@ function formatFileSize(bytes: number | null): string {
                     MANAGE SUBMISSIONS
                   </h2>
                   <p className="text-xs text-neutral-500 mt-1">
-                    Manage and review technology projects submitted through Cosmic Circuit.
+                    Manage and review technology projects submitted through Zen Tech Solutions.
                   </p>
                 </div>
 

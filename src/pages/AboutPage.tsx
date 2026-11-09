@@ -69,7 +69,7 @@ export const AboutPage: React.FC = () => {
       {/* Page Header */}
       <div className="max-w-4xl mb-16 md:mb-24">
         <h1 className="font-display-tech text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#000000] tracking-tight mb-6">
-          ABOUT COSMIC CIRCUIT
+          ABOUT ZEN TECH SOLUTIONS
         </h1>
         <div className="inline-block bg-[#f3f4f1] text-[#476800] border border-[#c4c7c7] font-mono-tech text-xs font-bold px-3 py-1 rounded mb-6">
           STUDIO POSITIONING
@@ -78,7 +78,7 @@ export const AboutPage: React.FC = () => {
           "WE TURN IDEAS INTO WORKING TECHNOLOGY."
         </h2>
         <p className="font-display-tech text-lg sm:text-xl md:text-2xl text-[#444748] font-normal leading-relaxed">
-          Cosmic Circuit is an electronics and product engineering studio focused on transforming ideas into real-world technology. We work across electronics, embedded systems, IoT, PCB development, CAD design, AI-powered hardware and complete product development.
+          Zen Tech Solutions is an electronics and product engineering studio focused on transforming ideas into real-world technology. We work across electronics, embedded systems, IoT, PCB development, CAD design, AI-powered hardware and complete product development.
         </p>
       </div>
 
@@ -115,7 +115,7 @@ export const AboutPage: React.FC = () => {
               OUR TEAM.
             </h2>
             <p className="font-display-tech text-base sm:text-lg text-[#444748]">
-              The engineers and product architects behind Cosmic Circuit.
+              The engineers and product architects behind Zen Tech Solutions.
             </p>
           </div>
 
@@ -192,7 +192,7 @@ export const AboutPage: React.FC = () => {
                   ) : (
                     <div className="pt-3 mt-3 border-t border-[#c4c7c7]/30">
                       <span className="font-mono-tech text-[10px] text-[#74a81e] font-semibold">
-                        COSMIC CIRCUIT LEADERSHIP
+                        ZEN TECH SOLUTIONS LEADERSHIP
                       </span>
                     </div>
                   )}

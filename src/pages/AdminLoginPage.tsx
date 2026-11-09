@@ -134,7 +134,7 @@ export const AdminLoginPage: React.FC = () => {
           <span>RETURN TO SITE</span>
         </Link>
         <div className="font-mono-tech text-xs text-neutral-400">
-          COSMIC CIRCUIT # SECURITY PORTAL
+          ZEN TECH SOLUTIONS # SECURITY PORTAL
         </div>
       </div>
 
@@ -143,8 +143,12 @@ export const AdminLoginPage: React.FC = () => {
         <div className="bg-white border border-[#c4c7c7]/70 rounded-2xl p-8 sm:p-10 shadow-sm">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="w-12 h-12 rounded-xl bg-[#000000] text-[#c8f179] flex items-center justify-center mx-auto mb-4 shadow-sm">
-              <Shield className="w-6 h-6" />
+            <div className="inline-flex items-center justify-center p-2 rounded-xl bg-white border border-[#e2e4de] mb-4 shadow-xs">
+              <img 
+                src="/zen_tech_full_logo.jpg" 
+                alt="Zen Tech Solutions" 
+                className="h-10 object-contain"
+              />
             </div>
             <span className="font-mono-tech text-[10px] text-[#476800] uppercase tracking-widest font-bold block mb-1">
               # RESTRICTED ACCESS
@@ -153,7 +157,7 @@ export const AdminLoginPage: React.FC = () => {
               ADMINISTRATOR LOGIN
             </h1>
             <p className="font-display-tech text-xs text-[#444748] mt-1.5">
-              Secure authentication for Cosmic Circuit technical management
+              Secure authentication for Zen Tech Solutions technical management
             </p>
           </div>
 
@@ -178,7 +182,7 @@ export const AdminLoginPage: React.FC = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@cosmiccircuit.com"
+                  placeholder="admin@zentechsolutions.com"
                   autoComplete="email"
                   className="w-full bg-[#f9faf7] border border-[#c4c7c7] rounded-lg pl-10 pr-3.5 py-3 text-sm font-display-tech text-black focus:outline-none focus:border-black transition-colors"
                 />
@@ -233,7 +237,7 @@ export const AdminLoginPage: React.FC = () => {
 
       {/* Footer */}
       <div className="text-center font-mono-tech text-[10px] text-neutral-400">
-        COSMIC CIRCUIT &copy; 2026 # HARDWARE & EMBEDDED SYSTEMS STUDIO
+        ZEN TECH SOLUTIONS &copy; 2026 # HARDWARE & EMBEDDED SYSTEMS STUDIO
       </div>
     </div>
   );

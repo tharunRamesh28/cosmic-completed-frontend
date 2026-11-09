@@ -44,7 +44,7 @@ describe('Phase 3, 6 & 7: Input Validation, Rate Limits & Payloads', () => {
     assert.strictEqual(validateEmail('@domain.com').isValid, false);
     assert.strictEqual(validateEmail('user@domain..com').isValid, false);
     assert.strictEqual(validateEmail('a'.repeat(250) + '@domain.com').isValid, false);
-    assert.strictEqual(validateEmail('legit.engineer@cosmiccircuit.com').isValid, true);
+    assert.strictEqual(validateEmail('legit.engineer@zentechsolutions.com').isValid, true);
   });
 
   it('should sanitize script tags and unicode control sequences', () => {

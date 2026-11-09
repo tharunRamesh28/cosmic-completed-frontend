@@ -61,10 +61,14 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
             <div>
               <Link
                 to="/"
-                className="font-display-tech text-2xl md:text-3xl font-bold tracking-tight text-white flex items-center gap-2 hover:opacity-90"
+                className="font-display-tech text-2xl md:text-3xl font-bold tracking-tight text-white flex items-center gap-2.5 hover:opacity-90"
               >
-                <span className="w-2.5 h-2.5 bg-[#c8f179] rounded-sm inline-block shadow-[0_0_10px_#c8f179]"></span>
-                <span>Cosmic Circuit</span>
+                <img 
+                  src="/zen_tech_icon.jpg" 
+                  alt="Zen Tech Solutions Logo" 
+                  className="w-9 h-9 object-contain rounded-md bg-white p-0.5"
+                />
+                <span className="font-extrabold tracking-tight">ZEN TECH <span className="text-[#c8f179]">SOLUTIONS</span></span>
               </Link>
               <p className="font-mono-tech text-xs text-neutral-400 mt-2">
                 High-End Technical Minimalism
@@ -159,17 +163,13 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
 
         {/* Large Brand Typography with Green Gradient in Black Area */}
         <div className="pt-8 pb-4 sm:pt-10 sm:pb-6 border-t border-neutral-800/80 flex flex-col items-center justify-center text-center">
-          <h2
-            className="font-display-tech text-[30px] min-[360px]:text-4xl sm:text-6xl md:text-8xl lg:text-[110px] font-black tracking-tight leading-none select-none pointer-events-none"
-            style={{
-              background: 'linear-gradient(180deg, #ffffff 15%, rgba(200, 241, 121, 0.95) 75%, #74a81e 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textShadow: '0 10px 40px rgba(200, 241, 121, 0.25)',
-            }}
-          >
-            Cosmic Circuit
-          </h2>
+          <div className="flex flex-col items-center gap-4 mb-2">
+            <img 
+              src="/zen_tech_full_logo.jpg" 
+              alt="Zen Tech Solutions" 
+              className="max-h-20 sm:max-h-28 md:max-h-36 object-contain rounded-xl shadow-2xl bg-white p-2 sm:p-3"
+            />
+          </div>
           <span className="font-mono-tech text-[10px] sm:text-xs text-[#c8f179]/90 tracking-[0.25em] uppercase font-bold mt-2">
             END-TO-END PRODUCT ENGINEERING STUDIO
           </span>
@@ -177,7 +177,7 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
 
         {/* Bottom Legal bar */}
         <div className="pt-6 sm:pt-8 border-t border-neutral-900/90 flex flex-col sm:flex-row justify-between items-center gap-4 font-mono-tech text-xs text-neutral-400">
-          <p>© 2026 Cosmic Circuit. All rights reserved.</p>
+          <p>© 2026 Zen Tech Solutions. All rights reserved.</p>
           <p className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-[#c8f179] shadow-[0_0_8px_#c8f179]"></span>
             <span className="text-neutral-300">SYSTEM NODE: ACTIVE (0.01mm TOLERANCE)</span>

@@ -128,12 +128,16 @@ export const Header: React.FC<HeaderProps> = ({
               e.preventDefault();
               navigate('/');
             }}
-            className={`font-display-tech text-xl sm:text-2xl font-bold tracking-tight transition-opacity duration-300 hover:opacity-80 flex items-center gap-2 ${isCircuitShaderActive ? 'text-white' : 'text-[#000000]'
+            className={`font-display-tech text-xl sm:text-2xl font-bold tracking-tight transition-opacity duration-300 hover:opacity-85 flex items-center gap-2.5 ${isCircuitShaderActive ? 'text-white' : 'text-[#000000]'
               }`}
             id="header-logo"
           >
-            <span className="w-2.5 h-2.5 bg-[#c8f179] rounded-sm inline-block shadow-[0_0_10px_#c8f179]"></span>
-            <span>Cosmic Circuit</span>
+            <img 
+              src="/zen_tech_icon.jpg" 
+              alt="Zen Tech Solutions Logo" 
+              className="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-md"
+            />
+            <span className="font-extrabold tracking-tight">ZEN TECH <span className="text-[#476800] font-semibold">SOLUTIONS</span></span>
           </a>
 
           {/* Top-Right Area: User actions and menu button */}
@@ -254,10 +258,14 @@ export const Header: React.FC<HeaderProps> = ({
                   handleClose();
                   navigate('/');
                 }}
-                className="font-display-tech text-2xl font-bold tracking-tight text-[#000000] flex items-center gap-2 hover:opacity-80 transition-opacity"
+                className="font-display-tech text-2xl font-bold tracking-tight text-[#000000] flex items-center gap-2.5 hover:opacity-85 transition-opacity"
               >
-                <span className="w-2.5 h-2.5 bg-[#c8f179] rounded-sm inline-block shadow-[0_0_10px_#c8f179]"></span>
-                <span>Cosmic Circuit</span>
+                <img 
+                  src="/zen_tech_icon.jpg" 
+                  alt="Zen Tech Solutions Logo" 
+                  className="w-8 h-8 object-contain rounded-md"
+                />
+                <span className="font-extrabold tracking-tight">ZEN TECH <span className="text-[#476800] font-semibold">SOLUTIONS</span></span>
               </a>
 
               <button
@@ -317,7 +325,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </blockquote>
                 <p className="font-mono-tech text-xs sm:text-sm font-semibold text-[#191c1b] mt-3 flex items-center gap-2">
                   <span className="w-3.5 h-[2px] bg-[#c8f179]"></span>
-                  <span>— Cosmic Circuit</span>
+                  <span>— Zen Tech Solutions</span>
                 </p>
               </div>
 

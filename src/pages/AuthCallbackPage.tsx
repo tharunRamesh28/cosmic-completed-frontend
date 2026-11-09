@@ -77,12 +77,16 @@ export const AuthCallbackPage: React.FC = () => {
       </div>
 
       <div className="relative z-10 w-full max-w-sm bg-white border border-[#c4c7c7] rounded-2xl p-8 text-center shadow-md">
-        <div className="w-10 h-10 rounded-xl bg-black text-[#c8f179] mx-auto flex items-center justify-center mb-4">
-          <span className="w-3 h-3 bg-[#c8f179] rounded-sm inline-block shadow-[0_0_10px_#c8f179]" />
+        <div className="w-12 h-12 rounded-xl bg-white border border-[#c4c7c7] mx-auto flex items-center justify-center mb-4 p-1">
+          <img 
+            src="/zen_tech_icon.jpg" 
+            alt="Zen Tech Solutions" 
+            className="w-full h-full object-contain rounded-md"
+          />
         </div>
 
         <h1 className="font-display-tech text-xl font-bold tracking-tight text-black mb-1">
-          COSMIC CIRCUIT
+          ZEN TECH SOLUTIONS
         </h1>
         <p className="font-mono-tech text-[11px] font-bold text-[#476800] uppercase tracking-wider mb-6">
           AUTHENTICATING

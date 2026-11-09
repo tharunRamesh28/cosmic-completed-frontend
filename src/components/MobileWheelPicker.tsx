@@ -190,7 +190,7 @@ export const MobileWheelPicker: React.FC<MobileWheelPickerProps> = ({
             CORE PHILOSOPHY &amp; DFM PRINCIPLES
           </span>
           <h2 className="font-display-tech text-2xl sm:text-3xl font-extrabold text-[#000000] tracking-tight">
-            WHY CHOOSE <span className="text-[#476800]">COSMIC CIRCUIT</span>?
+            WHY CHOOSE <span className="text-[#476800]">ZEN TECH SOLUTIONS</span>?
           </h2>
         </div>
 
@@ -295,7 +295,7 @@ export const MobileWheelPicker: React.FC<MobileWheelPickerProps> = ({
               </span>
             </div>
             <h2 className="font-display-tech text-2xl sm:text-3xl font-extrabold text-[#000000] tracking-tight leading-tight">
-              WHY CHOOSE <span className="text-[#476800]">COSMIC CIRCUIT</span>?
+              WHY CHOOSE <span className="text-[#476800]">ZEN TECH SOLUTIONS</span>?
             </h2>
           </div>
 

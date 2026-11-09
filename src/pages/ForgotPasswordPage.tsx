@@ -72,9 +72,13 @@ export const ForgotPasswordPage: React.FC = () => {
       {/* Top Bar */}
       <div className="relative z-20 w-full max-w-5xl mx-auto px-6 pt-8 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className="w-2 h-2 bg-[#B7FF3C] rounded-xs shadow-[0_0_8px_#B7FF3C] inline-block" />
+          <img 
+            src="/zen_tech_icon.jpg" 
+            alt="Zen Tech Solutions" 
+            className="w-6 h-6 object-contain rounded-md"
+          />
           <span className="font-display-tech text-sm font-extrabold tracking-tight text-white uppercase">
-            Cosmic Circuit
+            Zen Tech Solutions
           </span>
         </div>
 
@@ -184,7 +188,7 @@ export const ForgotPasswordPage: React.FC = () => {
       </div>
 
       <div className="relative z-20 pb-6 text-center font-mono-tech text-[10px] text-neutral-600 uppercase tracking-widest">
-        COSMIC CIRCUIT &copy; 2026 # SECURE ACCESS GATEWAY
+        ZEN TECH SOLUTIONS &copy; 2026 # SECURE ACCESS GATEWAY
       </div>
     </div>
   );

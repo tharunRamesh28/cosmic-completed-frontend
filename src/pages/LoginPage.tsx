@@ -133,9 +133,13 @@ export const LoginPage: React.FC = () => {
           }}
           className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
         >
-          <span className="w-2.5 h-2.5 bg-[#c8f179] rounded-sm shadow-[0_0_10px_#c8f179] inline-block" />
+          <img 
+            src="/zen_tech_icon.jpg" 
+            alt="Zen Tech Solutions" 
+            className="w-7 h-7 object-contain rounded-md"
+          />
           <span className="font-display-tech text-base font-extrabold tracking-tight text-black">
-            Cosmic Circuit
+            ZEN TECH <span className="text-[#476800] font-semibold">SOLUTIONS</span>
           </span>
         </a>
 
@@ -154,12 +158,16 @@ export const LoginPage: React.FC = () => {
           
           {/* Header Branding */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-black text-[#c8f179] mb-4 shadow-xs">
-              <Shield className="w-6 h-6" />
+            <div className="inline-flex items-center justify-center p-2 rounded-xl bg-white border border-[#e2e4de] mb-4 shadow-xs">
+              <img 
+                src="/zen_tech_full_logo.jpg" 
+                alt="Zen Tech Solutions" 
+                className="h-12 object-contain"
+              />
             </div>
 
             <h1 className="font-display-tech text-2xl sm:text-3xl font-black tracking-tight text-black">
-              COSMIC CIRCUIT
+              ZEN TECH SOLUTIONS
             </h1>
 
             <div className="font-mono-tech text-[11px] font-bold text-[#476800] uppercase tracking-widest mt-1">
@@ -167,7 +175,7 @@ export const LoginPage: React.FC = () => {
             </div>
 
             <p className="font-display-tech text-xs text-[#444748] mt-3 leading-relaxed">
-              Sign in with your Google account to access your Cosmic Circuit projects and client workspace.
+              Sign in with your Google account to access your Zen Tech Solutions projects and client workspace.
             </p>
           </div>
 
@@ -218,7 +226,7 @@ export const LoginPage: React.FC = () => {
           {/* Footer Card Note */}
           <div className="mt-8 pt-5 border-t border-[#c4c7c7]/30 text-center">
             <span className="font-mono-tech text-[10px] text-neutral-400">
-              COSMIC CIRCUIT • HARDWARE &amp; EMBEDDED SYSTEMS STUDIO
+              ZEN TECH SOLUTIONS • HARDWARE &amp; EMBEDDED SYSTEMS STUDIO
             </span>
           </div>
         </div>
