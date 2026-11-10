@@ -31,7 +31,7 @@ export const AboutPage: React.FC = () => {
     {
       name: 'Tharun',
       role: 'CO-FOUNDER & CTO',
-      description: 'IoT Engineer, Full Stack Developer, Problem Solver',
+      description: 'IoT Engineer, Full Stack Developer, Software Testing and Verification Engineer',
       image: tharunPhoto,
       socials: {
         instagram: 'https://www.instagram.com/cosmic_circuits_',
