@@ -161,7 +161,7 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
         {/* Large Brand Centerpiece Banner */}
         <div className="pt-12 pb-6 sm:pt-16 sm:pb-8 border-t border-neutral-800/80 flex flex-col items-center justify-center text-center">
           <div className="flex flex-col items-center gap-6 mb-4">
-            <ZenTechLogo isDarkBg={true} size="lg" />
+            <ZenTechLogo isDarkBg={true} size="lg" showIcon={false} />
           </div>
           <span className="font-mono-tech text-xs sm:text-sm text-[#c8f179]/90 tracking-[0.28em] uppercase font-bold mt-4">
             END-TO-END PRODUCT ENGINEERING STUDIO
