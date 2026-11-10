@@ -1,8 +1,15 @@
 import React from 'react';
 import { CursorGrid } from './CursorGrid';
-import { Share2, Terminal, Shield, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Instagram, Mail, Linkedin } from 'lucide-react';
 import { Link, useRouter } from '../router';
 import { ZenTechLogo } from './ZenTechLogo';
+
+// Social navigation links (ready for URLs to be added)
+const SOCIAL_LINKS = {
+  instagram: '#',
+  email: '#',
+  linkedin: '#',
+};
 
 interface FooterProps {
   onStartProject?: () => void;
@@ -72,29 +79,36 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
               </p>
             </div>
 
-            {/* Social / Terminal Icons */}
+            {/* Social / Contact Navigation Icons */}
             <div className="flex gap-4 items-center">
-              <Link
-                to="/works"
+              <a
+                href={SOCIAL_LINKS.instagram}
+                target={SOCIAL_LINKS.instagram !== '#' ? '_blank' : undefined}
+                rel={SOCIAL_LINKS.instagram !== '#' ? 'noopener noreferrer' : undefined}
                 className="w-8 h-8 rounded border border-neutral-800 bg-neutral-950/60 flex items-center justify-center text-neutral-400 hover:text-[#c8f179] hover:border-[#c8f179] transition-colors"
-                title="Works"
+                title="Instagram"
+                aria-label="Instagram"
               >
-                <Share2 className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/services"
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a
+                href={SOCIAL_LINKS.email}
                 className="w-8 h-8 rounded border border-neutral-800 bg-neutral-950/60 flex items-center justify-center text-neutral-400 hover:text-[#c8f179] hover:border-[#c8f179] transition-colors"
-                title="Services"
+                title="Email"
+                aria-label="Email"
               >
-                <Terminal className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/about"
+                <Mail className="w-4 h-4" />
+              </a>
+              <a
+                href={SOCIAL_LINKS.linkedin}
+                target={SOCIAL_LINKS.linkedin !== '#' ? '_blank' : undefined}
+                rel={SOCIAL_LINKS.linkedin !== '#' ? 'noopener noreferrer' : undefined}
                 className="w-8 h-8 rounded border border-neutral-800 bg-neutral-950/60 flex items-center justify-center text-neutral-400 hover:text-[#c8f179] hover:border-[#c8f179] transition-colors"
-                title="About"
+                title="LinkedIn"
+                aria-label="LinkedIn"
               >
-                <Shield className="w-4 h-4" />
-              </Link>
+                <Linkedin className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
