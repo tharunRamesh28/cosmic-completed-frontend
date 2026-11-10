@@ -273,7 +273,7 @@ export const MobileWheelPicker: React.FC<MobileWheelPickerProps> = ({
       {/* Sticky Stage: Positioned cleanly beneath header */}
       <div
         ref={stickyRef}
-        className="sticky top-[58px] sm:top-[68px] w-full flex flex-col items-center px-4 sm:px-6 pt-3 pb-2 z-20"
+        className="sticky top-[70px] sm:top-[76px] w-full flex flex-col items-center px-4 sm:px-6 pt-3 pb-2 z-20"
       >
         <div className="w-full max-w-md mx-auto flex flex-col">
           {/* 1. Eyebrow Badge & Section Title with subtle left-to-right reveal */}

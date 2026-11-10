@@ -153,7 +153,7 @@ function AppContent() {
         <Header isCircuitShaderActive={isCircuitShaderActive} />
 
         {/* Main Content Sections */}
-        <main className="relative z-10 pt-[58px] sm:pt-[68px] md:pt-[84px]">
+        <main className="relative z-10 pt-[70px] sm:pt-[76px] md:pt-[84px]">
           <React.Suspense fallback={<RouteLoadingFallback />}>
             <div key={path} className="page-enter min-h-[70vh]">
               {/* Route: /works */}

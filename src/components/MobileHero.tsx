@@ -296,22 +296,22 @@ export const MobileHero: React.FC<MobileHeroProps> = ({ onStartProject }) => {
         style={{
           height: reducedMotion
             ? 'auto'
-            : `calc(100svh - 58px + ${TOTAL_HERO_TRAVEL}px)`,
+            : `calc(100svh - 70px + ${TOTAL_HERO_TRAVEL}px)`,
         }}
       >
         {/* Sticky Full Mobile Stage */}
         <div
           className={`${
             reducedMotion
-              ? 'relative py-4'
-              : 'sticky top-[58px] sm:top-[68px] h-[calc(100svh-58px)] sm:h-[calc(100svh-68px)]'
+              ? 'relative py-6'
+              : 'sticky top-[70px] sm:top-[76px] h-[calc(100svh-70px)] sm:h-[calc(100svh-76px)]'
           } w-full flex flex-col justify-between items-center px-4 sm:px-6 py-2 overflow-hidden z-10`}
         >
           {/* A. HERO CONTENT (Headline, description, tags, CTA) */}
           <div
             ref={heroContentRef}
             id="hero-mobile"
-            className="w-full max-w-md mx-auto flex flex-col items-center text-center shrink-0 pt-1 sm:pt-2 transition-transform duration-75 ease-out"
+            className="w-full max-w-md mx-auto flex flex-col items-center text-center shrink-0 pt-3.5 sm:pt-4 transition-transform duration-75 ease-out"
             style={{
               opacity: reducedMotion ? 1 : contentOpacity,
               transform: reducedMotion
