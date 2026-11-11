@@ -11,7 +11,7 @@ export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   },
 });
 
-export const AUTHORIZED_ADMIN_UUID = '9163b26d-c7b1-4a13-8688-62ca34233fd9';
+export const AUTHORIZED_ADMIN_UUID = '11ce9252-c48d-4a53-b1c3-dbb093678268';
 
 export interface ProjectSubmission {
   id: string;

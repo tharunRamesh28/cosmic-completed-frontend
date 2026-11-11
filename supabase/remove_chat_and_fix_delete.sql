@@ -24,6 +24,6 @@ CREATE POLICY "Admins can delete projects"
 ON public.project_submissions FOR DELETE TO authenticated
 USING (
   -- Replace this UUID with your actual AUTHORIZED_ADMIN_UUID if different
-  auth.uid() = '9163b26d-c7b1-4a13-8688-62ca34233fd9'
+  auth.uid() = '11ce9252-c48d-4a53-b1c3-dbb093678268'
   AND status = 'rejected'
 );

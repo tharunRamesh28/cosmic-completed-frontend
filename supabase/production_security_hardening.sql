@@ -57,7 +57,7 @@ BEGIN
   RETURN EXISTS (
     SELECT 1 FROM public.admin_users 
     WHERE user_id = auth.uid()
-  ) OR (auth.uid() = '9163b26d-c7b1-4a13-8688-62ca34233fd9'::uuid);
+  ) OR (auth.uid() = '11ce9252-c48d-4a53-b1c3-dbb093678268'::uuid);
 END;
 $$;
 
@@ -67,7 +67,7 @@ GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
 
 -- Ensure the designated admin is registered in public.admin_users
 INSERT INTO public.admin_users (user_id)
-VALUES ('9163b26d-c7b1-4a13-8688-62ca34233fd9'::uuid)
+VALUES ('11ce9252-c48d-4a53-b1c3-dbb093678268'::uuid)
 ON CONFLICT (user_id) DO NOTHING;
 
 -- --------------------------------------------------------------------

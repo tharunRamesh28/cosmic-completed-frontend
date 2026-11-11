@@ -28,18 +28,18 @@ ALTER TABLE public.project_messages ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Admins can view all messages" ON public.project_messages;
 CREATE POLICY "Admins can view all messages"
 ON public.project_messages FOR SELECT TO authenticated
-USING (auth.uid() = '9163b26d-c7b1-4a13-8688-62ca34233fd9');
+USING (auth.uid() = '11ce9252-c48d-4a53-b1c3-dbb093678268');
 
 DROP POLICY IF EXISTS "Admins can insert messages" ON public.project_messages;
 CREATE POLICY "Admins can insert messages"
 ON public.project_messages FOR INSERT TO authenticated
-WITH CHECK (auth.uid() = '9163b26d-c7b1-4a13-8688-62ca34233fd9');
+WITH CHECK (auth.uid() = '11ce9252-c48d-4a53-b1c3-dbb093678268');
 
 DROP POLICY IF EXISTS "Admins can update messages (read status)" ON public.project_messages;
 CREATE POLICY "Admins can update messages (read status)"
 ON public.project_messages FOR UPDATE TO authenticated
-USING (auth.uid() = '9163b26d-c7b1-4a13-8688-62ca34233fd9')
-WITH CHECK (auth.uid() = '9163b26d-c7b1-4a13-8688-62ca34233fd9');
+USING (auth.uid() = '11ce9252-c48d-4a53-b1c3-dbb093678268')
+WITH CHECK (auth.uid() = '11ce9252-c48d-4a53-b1c3-dbb093678268');
 
 DROP POLICY IF EXISTS "Users can view their project messages" ON public.project_messages;
 CREATE POLICY "Users can view their project messages"
@@ -69,7 +69,7 @@ DROP POLICY IF EXISTS "Admins can delete projects" ON public.project_submissions
 CREATE POLICY "Admins can delete projects"
 ON public.project_submissions FOR DELETE TO authenticated
 USING (
-  auth.uid() = '9163b26d-c7b1-4a13-8688-62ca34233fd9'
+  auth.uid() = '11ce9252-c48d-4a53-b1c3-dbb093678268'
   AND status = 'rejected'
 );
 
