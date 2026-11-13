@@ -32,34 +32,34 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
       id="footer"
     >
       {/*
-        SUBTLE GREEN AMBIENT SHADE:
-        Soft luminous Cosmic Circuit green atmospheric glow rising gently from the bottom of the black footer area,
-        without overpowering or washing out the deep dark background.
+        LUMINOUS COSMIC CIRCUIT GREEN AMBIENT SHADE (Referenced from original Cosmic Circuit aesthetic):
+        Atmospheric green illumination and centered bloom rising behind the brand centerpiece,
+        complemented by the subtle high-tech baseline grid.
       */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
         {/* Soft bottom-up gentle green atmospheric glow */}
         <div
-          className="absolute inset-x-0 bottom-0 h-[220px] opacity-25 pointer-events-none"
+          className="absolute inset-x-0 bottom-0 h-[480px] opacity-40 pointer-events-none"
           style={{
             background:
-              'linear-gradient(to top, rgba(71, 104, 0, 0.4) 0%, rgba(116, 168, 30, 0.2) 40%, transparent 100%)',
+              'radial-gradient(ellipse 110% 80% at 50% 100%, rgba(71, 104, 0, 0.45) 0%, rgba(25, 36, 6, 0.3) 40%, transparent 80%)',
           }}
         />
 
-        {/* Soft centered bloom behind the logo */}
+        {/* Soft centered radiant bloom behind the logo centerpiece */}
         <div
-          className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-[85%] max-w-[1000px] h-[220px] opacity-35 blur-[90px] pointer-events-none"
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 w-[90%] max-w-[1100px] h-[340px] opacity-45 blur-[85px] pointer-events-none"
           style={{
             background:
-              'radial-gradient(ellipse at bottom center, #c8f179 0%, #74a81e 35%, transparent 75%)',
+              'radial-gradient(ellipse at center, #c8f179 0%, #74a81e 35%, transparent 75%)',
           }}
         />
 
         {/* Technical baseline grid pattern over the glow */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="tech-grid-dark absolute inset-0 opacity-15" />
-        <CursorGrid color="185, 232, 106" maxOpacity={0.25} />
-      </div>
+          <div className="tech-grid-dark absolute inset-0 opacity-25" />
+          <CursorGrid color="185, 232, 106" maxOpacity={0.3} />
+        </div>
       </div>
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-16 py-10 sm:py-16 md:py-24 relative z-10">
@@ -173,21 +173,24 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
         </div>
 
         {/* Large Brand Centerpiece Banner */}
-        <div className="pt-12 pb-6 sm:pt-16 sm:pb-8 border-t border-neutral-800/80 flex flex-col items-center justify-center text-center">
+        <div className="pt-12 pb-6 sm:pt-16 sm:pb-8 border-t border-[#74a81e]/30 flex flex-col items-center justify-center text-center relative z-10">
           <div className="flex flex-col items-center gap-6 mb-4">
-            <ZenTechLogo isDarkBg={true} size="lg" showIcon={false} />
+            <ZenTechLogo isDarkBg={true} size="lg" showIcon={false} useCosmicGradient={true} />
           </div>
-          <span className="font-mono-tech text-xs sm:text-sm text-[#c8f179]/90 tracking-[0.28em] uppercase font-bold mt-4">
+          <span className="font-mono-tech text-xs sm:text-sm text-[#c8f179] tracking-[0.28em] uppercase font-bold mt-4 drop-shadow-[0_0_12px_rgba(200,241,121,0.55)]">
             END-TO-END PRODUCT ENGINEERING STUDIO
           </span>
         </div>
 
         {/* Bottom Legal bar */}
-        <div className="pt-6 sm:pt-8 border-t border-neutral-900/90 flex flex-col sm:flex-row justify-between items-center gap-4 font-mono-tech text-xs text-neutral-400">
+        <div className="pt-6 sm:pt-8 border-t border-[#74a81e]/25 flex flex-col sm:flex-row justify-between items-center gap-4 font-mono-tech text-xs text-neutral-400 relative z-10">
           <p>© 2026 Zen Tech Solutions. All rights reserved.</p>
-          <p className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#c8f179] shadow-[0_0_8px_#c8f179]"></span>
-            <span className="text-neutral-300">SYSTEM NODE: ACTIVE (0.01mm TOLERANCE)</span>
+          <p className="flex items-center gap-2.5">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c8f179] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#c8f179] shadow-[0_0_10px_#c8f179,0_0_20px_#74a81e]"></span>
+            </span>
+            <span className="text-neutral-300 font-semibold tracking-wide">SYSTEM NODE: ACTIVE (0.01mm TOLERANCE)</span>
           </p>
         </div>
       </div>
