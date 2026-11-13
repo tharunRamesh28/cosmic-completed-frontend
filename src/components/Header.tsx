@@ -143,7 +143,7 @@ export const Header: React.FC<HeaderProps> = ({
             onMouseLeave={handleMouseLeave}
           >
             {user ? (
-              <div className="flex items-center gap-4">
+              <div className="hidden sm:flex items-center gap-4">
                 <MagnifyHeaderItem mouseX={mouseX}>
                   <button
                   onClick={() => navigate('/my-requests')}
@@ -204,9 +204,10 @@ export const Header: React.FC<HeaderProps> = ({
                 </MagnifyHeaderItem>
               </div>
             ) : (
-              <MagnifyHeaderItem mouseX={mouseX}>
-              <button
-                onClick={() => navigate('/login')}
+              <div className="hidden sm:flex items-center">
+                <MagnifyHeaderItem mouseX={mouseX}>
+                <button
+                  onClick={() => navigate('/login')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-mono-tech text-xs font-bold transition-all duration-200 shadow-xs hover:-translate-y-0.5 cursor-pointer ${
                   isCircuitShaderActive
                     ? 'border-neutral-700 bg-neutral-900/80 text-neutral-200 hover:border-[#c8f179] hover:text-[#c8f179]'
@@ -216,8 +217,9 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <UserIcon className="w-3.5 h-3.5 text-[#476800]" />
                 <span className="hidden sm:inline">LOGIN</span>
-              </button>
-              </MagnifyHeaderItem>
+                </button>
+                </MagnifyHeaderItem>
+              </div>
             )}
 
             <MagnifyHeaderItem mouseX={mouseX}>
@@ -269,6 +271,92 @@ export const Header: React.FC<HeaderProps> = ({
                 <X className="w-5 h-5" />
               </button>
             </div>
+
+            {/* Mid-Top: Connected Google Account Card inside navigation menu */}
+            {user ? (
+              <div className="mt-4 mb-2 p-3 sm:p-4 rounded-2xl border border-[#c4c7c7]/60 bg-white/95 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="relative shrink-0">
+                    {user.user_metadata?.avatar_url ? (
+                      <img
+                        src={user.user_metadata.avatar_url}
+                        alt={user.user_metadata.full_name || user.email || 'User'}
+                        className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl object-cover border border-[#c8f179] shadow-xs"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl border border-[#c4c7c7] bg-[#f9faf7] text-[#476800] flex items-center justify-center font-mono-tech text-base font-bold">
+                        {(user.email?.[0] || 'U').toUpperCase()}
+                      </div>
+                    )}
+                    <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-[#476800] border-2 border-white rounded-full" title="Connected" />
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="font-display-tech text-sm sm:text-base font-bold text-[#191c1b] truncate">
+                        {user.user_metadata?.full_name || 'Google Account'}
+                      </p>
+                      <span className="font-mono-tech text-[10px] font-semibold uppercase tracking-wider text-[#476800] bg-[#c8f179]/30 px-1.5 py-0.5 rounded border border-[#c8f179]/60 shrink-0">
+                        Active
+                      </span>
+                    </div>
+                    <p className="font-mono-tech text-xs text-[#5c6054] truncate">
+                      {user.email}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 pt-1 sm:pt-0 border-t sm:border-t-0 border-[#c4c7c7]/30">
+                  <button
+                    onClick={() => {
+                      handleClose();
+                      navigate('/my-requests');
+                    }}
+                    className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-black text-[#c8f179] hover:bg-[#1a1a1a] font-mono-tech text-xs font-bold transition-all shadow-xs cursor-pointer"
+                    title="View submitted project requests"
+                  >
+                    <ClipboardList className="w-3.5 h-3.5" />
+                    <span>MY REQUESTS</span>
+                  </button>
+
+                  <button
+                    onClick={handleSignOut}
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#c4c7c7]/70 bg-white hover:border-black text-[#444748] hover:text-black font-mono-tech text-xs font-bold transition-all cursor-pointer"
+                    title="Sign out of Google account"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>SIGN OUT</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-4 mb-2 p-3 sm:p-4 rounded-2xl border border-[#c4c7c7]/60 bg-white/80 shadow-xs flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-[#c4c7c7] bg-[#f9faf7] text-[#476800] flex items-center justify-center shrink-0">
+                    <UserIcon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="font-display-tech text-sm font-bold text-[#191c1b]">
+                      Client Portal
+                    </p>
+                    <p className="font-mono-tech text-xs text-[#5c6054]">
+                      Sign in with Google to submit and track requests
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    handleClose();
+                    navigate('/login');
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#c8f179] hover:bg-[#b9e86a] text-black font-mono-tech text-xs font-bold border border-black transition-all cursor-pointer shrink-0"
+                >
+                  <UserIcon className="w-3.5 h-3.5" />
+                  <span>SIGN IN</span>
+                </button>
+              </div>
+            )}
 
             {/* Center: Numbered Navigation Items */}
             <nav className="my-auto py-10 md:py-16 flex flex-col gap-2 sm:gap-3 max-w-2xl" id="nav-items-container">
@@ -322,7 +410,7 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
 
               {user ? (
-                <div className="flex items-center gap-3">
+                <div className="hidden sm:flex items-center gap-3">
                   <div className="flex items-center gap-2">
                     {user.user_metadata?.avatar_url && (
                       <img
@@ -350,7 +438,7 @@ export const Header: React.FC<HeaderProps> = ({
                     handleClose();
                     navigate('/login');
                   }}
-                  className="inline-flex items-center gap-2 font-mono-tech text-xs font-bold text-black py-2 px-3.5 rounded-lg border border-black bg-[#c8f179] hover:bg-[#b9e86a] transition-colors cursor-pointer shrink-0"
+                  className="hidden sm:inline-flex items-center gap-2 font-mono-tech text-xs font-bold text-black py-2 px-3.5 rounded-lg border border-black bg-[#c8f179] hover:bg-[#b9e86a] transition-colors cursor-pointer shrink-0"
                 >
                   <UserIcon className="w-3.5 h-3.5" />
                   <span>SIGN IN</span>

@@ -1,4 +1,9 @@
 import React from 'react';
+import robotZLight from '../assets/zen_tech_robot_z.png';
+import robotZDark from '../assets/zen_tech_robot_z_white.png';
+import wordmarkLight from '../assets/zen_tech_wordmark.png';
+import wordmarkDark from '../assets/zen_tech_wordmark_white.png';
+import wordmarkCosmic from '../assets/zen_tech_wordmark_cosmic.png';
 
 interface LogoProps {
   isDarkBg?: boolean;
@@ -23,40 +28,40 @@ export const ZenTechLogo: React.FC<LogoProps> = ({
   showIcon = true,
   useCosmicGradient = false,
 }) => {
-  const robotZIconSrc = isDarkBg ? '/zen_tech_robot_z_white.png' : '/zen_tech_robot_z.png';
+  const robotZIconSrc = isDarkBg ? robotZDark : robotZLight;
   const wordmarkSrc = useCosmicGradient
-    ? '/zen_tech_wordmark_cosmic.png'
+    ? wordmarkCosmic
     : isDarkBg
-    ? '/zen_tech_wordmark_white.png'
-    : '/zen_tech_wordmark.png';
+    ? wordmarkDark
+    : wordmarkLight;
   const lineColor = isDarkBg ? 'rgba(255, 255, 255, 0.45)' : '#080808';
 
   const iconSizeClasses =
     size === 'sm'
-      ? 'w-9 h-9 sm:w-10 sm:h-10'
+      ? 'w-8 h-8 sm:w-9 sm:h-9'
       : size === 'xl'
-      ? 'w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44'
+      ? 'w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40'
       : size === 'lg'
-      ? 'w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36'
-      : 'w-11 h-11 sm:w-12 sm:h-12 md:w-13 md:h-13';
+      ? 'w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32'
+      : 'w-8 h-8 sm:w-11 sm:h-11 md:w-12 md:h-12';
 
   const verticalBarHeight =
     size === 'sm'
-      ? 'clamp(20px, 4vw, 24px)'
+      ? 'clamp(18px, 3.5vw, 22px)'
       : size === 'xl'
       ? 'clamp(64px, 12vw, 92px)'
       : size === 'lg'
-      ? 'clamp(52px, 9vw, 72px)'
-      : 'clamp(28px, 4.2vw, 36px)';
+      ? 'clamp(48px, 8.5vw, 70px)'
+      : 'clamp(22px, 4vw, 32px)';
 
   const wordmarkSizeStyle =
     size === 'sm'
-      ? { height: 'clamp(20px, 4vw, 24px)' }
+      ? { height: 'clamp(18px, 3.5vw, 22px)' }
       : size === 'xl'
-      ? { height: 'clamp(72px, 14vw, 100px)' }
+      ? { height: 'clamp(64px, 12vw, 92px)' }
       : size === 'lg'
-      ? { height: 'clamp(58px, 11vw, 84px)' }
-      : { height: 'clamp(26px, 4.8vw, 34px)' };
+      ? { height: 'clamp(48px, 8.5vw, 72px)' }
+      : { height: 'clamp(20px, 4vw, 30px)' };
 
   return (
     <div
