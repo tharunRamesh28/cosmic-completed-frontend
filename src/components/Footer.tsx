@@ -32,26 +32,46 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
       id="footer"
     >
       {/*
-        LUMINOUS COSMIC CIRCUIT GREEN AMBIENT SHADE (Referenced from original Cosmic Circuit aesthetic):
-        Atmospheric green illumination and centered bloom rising behind the brand centerpiece,
-        complemented by the subtle high-tech baseline grid.
+        COSMIC GREEN HORIZON & FLOOR GLOW AT THE END OF THE WEBSITE:
+        Vibrant atmospheric underglow emanating from the bottom-most boundary of the website,
+        creating the signature futuristic Cosmic Circuit floor radiance while keeping the
+        brand name above clean, crisp, and high-contrast.
       */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
-        {/* Soft bottom-up gentle green atmospheric glow */}
+        {/* Deep atmospheric ambient radiance rising from the bottom edge */}
         <div
-          className="absolute inset-x-0 bottom-0 h-[480px] opacity-40 pointer-events-none"
+          className="absolute inset-x-0 bottom-0 h-[220px] sm:h-[280px] opacity-75 pointer-events-none"
           style={{
             background:
-              'radial-gradient(ellipse 110% 80% at 50% 100%, rgba(71, 104, 0, 0.45) 0%, rgba(25, 36, 6, 0.3) 40%, transparent 80%)',
+              'radial-gradient(ellipse 100% 100% at 50% 100%, rgba(116, 168, 30, 0.55) 0%, rgba(71, 104, 0, 0.38) 35%, rgba(20, 32, 5, 0.15) 70%, transparent 100%)',
           }}
         />
 
-        {/* Soft centered radiant bloom behind the logo centerpiece */}
+        {/* Radiant core green floor glow at the very end of the website */}
         <div
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 w-[90%] max-w-[1100px] h-[340px] opacity-45 blur-[85px] pointer-events-none"
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[95%] max-w-[1280px] h-[140px] sm:h-[180px] opacity-80 blur-[45px] pointer-events-none"
           style={{
             background:
-              'radial-gradient(ellipse at center, #c8f179 0%, #74a81e 35%, transparent 75%)',
+              'radial-gradient(ellipse 85% 100% at 50% 100%, #c8f179 0%, #74a81e 40%, #476800 70%, transparent 100%)',
+          }}
+        />
+
+        {/* High-luminosity horizontal horizon flare along the bottom edge */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-[50px] sm:h-[70px] opacity-90 blur-[15px] pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse 70% 100% at 50% 100%, rgba(200, 241, 121, 0.9) 0%, rgba(140, 210, 30, 0.5) 45%, transparent 80%)',
+          }}
+        />
+
+        {/* Ground baseline laser line at the absolute bottom edge */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-[2px] opacity-80"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent 5%, rgba(200, 241, 121, 0.4) 20%, rgba(200, 241, 121, 0.95) 50%, rgba(200, 241, 121, 0.4) 80%, transparent 95%)',
+            boxShadow: '0 0 18px rgba(200, 241, 121, 0.85), 0 0 36px rgba(116, 168, 30, 0.6)',
           }}
         />
 
@@ -175,9 +195,9 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
         {/* Large Brand Centerpiece Banner */}
         <div className="pt-12 pb-6 sm:pt-16 sm:pb-8 border-t border-[#74a81e]/30 flex flex-col items-center justify-center text-center relative z-10">
           <div className="flex flex-col items-center gap-6 mb-4">
-            <ZenTechLogo isDarkBg={true} size="lg" showIcon={false} useCosmicGradient={true} />
+            <ZenTechLogo isDarkBg={true} size="lg" showIcon={false} useCosmicGradient={false} />
           </div>
-          <span className="font-mono-tech text-xs sm:text-sm text-[#c8f179] tracking-[0.28em] uppercase font-bold mt-4 drop-shadow-[0_0_12px_rgba(200,241,121,0.55)]">
+          <span className="font-mono-tech text-xs sm:text-sm text-[#c8f179] tracking-[0.28em] uppercase font-bold mt-4">
             END-TO-END PRODUCT ENGINEERING STUDIO
           </span>
         </div>

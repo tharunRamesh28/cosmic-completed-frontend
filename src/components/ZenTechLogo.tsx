@@ -94,11 +94,7 @@ export const ZenTechLogo: React.FC<LogoProps> = ({
         src={wordmarkSrc}
         alt="Zen Tech Solutions"
         style={wordmarkSizeStyle}
-        className={`w-auto max-w-full object-contain shrink-0 transition-all duration-300 ${
-          useCosmicGradient
-            ? 'drop-shadow-[0_0_30px_rgba(200,241,121,0.45)] drop-shadow-[0_0_15px_rgba(116,168,30,0.3)]'
-            : ''
-        }`}
+        className="w-auto max-w-full object-contain shrink-0 transition-all duration-300"
       />
     </div>
   );
