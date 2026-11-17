@@ -18,7 +18,8 @@ import {
   Building,
   User,
   X,
-  FileText
+  FileText,
+  Download
 } from 'lucide-react';
 import { supabase, ProjectSubmission, ProjectFile } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
@@ -145,6 +146,28 @@ export const MyRequestsPage: React.FC = () => {
   const [viewingFilesForId, setViewingFilesForId] = useState<string | null>(null);
   const [projectFiles, setProjectFiles] = useState<ProjectFile[]>([]);
   const [loadingFiles, setLoadingFiles] = useState<boolean>(false);
+  const [downloadingFileId, setDownloadingFileId] = useState<string | null>(null);
+
+  // Secure File Download via signed URL (valid 5 min)
+  const handleDownloadFile = async (file: ProjectFile) => {
+    setDownloadingFileId(file.id);
+    try {
+      const { data, error } = await supabase.storage
+        .from('project-files')
+        .createSignedUrl(file.storage_path, 300);
+
+      if (error || !data?.signedUrl) {
+        alert(`Failed to create secure download link: ${error?.message || 'Access denied'}`);
+        return;
+      }
+
+      window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
+    } catch {
+      alert('Error initiating file download.');
+    } finally {
+      setDownloadingFileId(null);
+    }
+  };
 
   // Redirect if not logged in
   useEffect(() => {
@@ -870,17 +893,29 @@ export const MyRequestsPage: React.FC = () => {
                 {projectFiles.map((file) => (
                   <div
                     key={file.id}
-                    className="p-3 bg-[#f9faf7] border border-[#c4c7c7]/60 rounded-xl flex items-center justify-between text-xs"
+                    className="p-3 bg-[#f9faf7] border border-[#c4c7c7]/60 rounded-xl flex items-center justify-between text-xs gap-3"
                   >
-                    <div className="flex items-center gap-2 truncate">
+                    <div className="flex items-center gap-2 min-w-0">
                       <FileText className="w-4 h-4 text-[#476800] shrink-0" />
                       <span className="font-mono-tech font-bold text-black truncate">
                         {file.file_name}
                       </span>
                     </div>
-                    <span className="font-mono-tech text-[10px] text-neutral-400 shrink-0">
-                      {file.file_size ? `${(file.file_size / 1024).toFixed(0)} KB` : 'FILE'}
-                    </span>
+                    <div className="flex items-center gap-2.5 shrink-0">
+                      <span className="font-mono-tech text-[10px] text-neutral-400">
+                        {file.file_size ? `${(file.file_size / 1024).toFixed(0)} KB` : 'FILE'}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleDownloadFile(file)}
+                        disabled={downloadingFileId === file.id}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 bg-black text-[#c8f179] hover:bg-neutral-800 rounded-lg font-mono-tech text-[10px] font-bold transition-colors cursor-pointer disabled:opacity-50"
+                        title="Download file securely"
+                      >
+                        <Download className="w-3 h-3" />
+                        <span>{downloadingFileId === file.id ? 'DOWNLOADING...' : 'DOWNLOAD'}</span>
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>

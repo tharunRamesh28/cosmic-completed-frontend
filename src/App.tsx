@@ -49,7 +49,7 @@ function AppContent() {
   const [modalInitialTier, setModalInitialTier] = useState<string | undefined>(undefined);
   const [activeSection, setActiveSection] = useState<string>('hero');
 
-  const normalizedPath = path.replace(/\/$/, '') || '/';
+  const normalizedPath = (path.split('?')[0].split('#')[0].replace(/\/$/, '')) || '/';
   const isAuthRoute =
     normalizedPath === '/login' ||
     normalizedPath === '/admin-login' ||

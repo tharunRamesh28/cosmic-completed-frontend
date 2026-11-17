@@ -169,9 +169,11 @@ export const OrderPage: React.FC = () => {
         status: 'new' as const,
       };
 
-      const { error: submissionError } = await supabase
+      const { data: insertedData, error: submissionError } = await supabase
         .from('project_submissions')
-        .insert(submissionRecord);
+        .insert(submissionRecord)
+        .select('id')
+        .single();
 
       if (submissionError) {
         if (!user && (submissionError.code === '42501' || submissionError.message?.toLowerCase().includes('permission') || submissionError.message?.toLowerCase().includes('policy'))) {
@@ -188,9 +190,17 @@ export const OrderPage: React.FC = () => {
 
       recordSubmissionTimestamp('cc_order_submission_ts');
 
-      // STEP 6: Upload selected files if any were provided
-      if (selectedFiles.length > 0) {
+      // STEP 6: Upload selected files if any were provided and record metadata in project_files
+      if (selectedFiles.length > 0 && insertedData?.id) {
         const uploadFolder = user ? user.id : 'guest_' + Date.now();
+        const fileMetadataRecords: {
+          submission_id: string;
+          file_name: string;
+          storage_path: string;
+          file_size: number;
+          file_type: string;
+        }[] = [];
+
         for (const file of selectedFiles) {
           const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
           const storagePath = `${uploadFolder}/${Date.now()}_${sanitizedFileName}`;
@@ -204,6 +214,24 @@ export const OrderPage: React.FC = () => {
 
           if (uploadError) {
             console.error('Storage upload error:', uploadError);
+          } else {
+            fileMetadataRecords.push({
+              submission_id: insertedData.id,
+              file_name: file.name,
+              storage_path: storagePath,
+              file_size: file.size,
+              file_type: file.type || file.name.split('.').pop() || 'application/octet-stream',
+            });
+          }
+        }
+
+        if (fileMetadataRecords.length > 0) {
+          const { error: fileInsertError } = await supabase
+            .from('project_files')
+            .insert(fileMetadataRecords);
+
+          if (fileInsertError) {
+            console.error('Failed to link project file metadata:', fileInsertError);
           }
         }
       }

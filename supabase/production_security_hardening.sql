@@ -70,6 +70,10 @@ INSERT INTO public.admin_users (user_id)
 VALUES ('11ce9252-c48d-4a53-b1c3-dbb093678268'::uuid)
 ON CONFLICT (user_id) DO NOTHING;
 
+-- Revoke previous/obsolete admin access if present
+DELETE FROM public.admin_users
+WHERE user_id = '9163b26d-c7b1-4a13-8688-62ca34233fd9'::uuid;
+
 -- --------------------------------------------------------------------
 -- 3. RLS POLICIES: public.admin_users
 -- Normal users must NOT be able to view or manipulate admin records.

@@ -26,8 +26,8 @@ interface ProjectDetailPageProps {
 export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ slug: propSlug }) => {
   const { path, navigate } = useRouter();
 
-  // Extract slug from prop or current pathname
-  const currentSlug = propSlug || path.replace(/^\/works\/?/, '').replace(/\/$/, '');
+  // Extract slug from prop or current pathname (stripping query parameters and hashes)
+  const currentSlug = propSlug || path.split('?')[0].split('#')[0].replace(/^\/works\/?/, '').replace(/\/$/, '');
   const project: Project | undefined = PROJECTS_DATA.find(
     (p) => p.slug.toLowerCase() === currentSlug.toLowerCase()
   );

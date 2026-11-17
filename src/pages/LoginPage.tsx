@@ -72,7 +72,7 @@ export const LoginPage: React.FC = () => {
           });
 
           if (googleBtnContainerRef.current) {
-            googleBtnContainerRef.current.innerHTML = '';
+            googleBtnContainerRef.current.replaceChildren();
             (window as any).google.accounts.id.renderButton(
               googleBtnContainerRef.current,
               {
