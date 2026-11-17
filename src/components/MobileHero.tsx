@@ -226,11 +226,11 @@ export const MobileHero: React.FC<MobileHeroProps> = ({ onStartProject }) => {
   }, [drawFrame, processQueue]);
 
   // Mobile scroll metrics:
-  // ASSEMBLY_TRAVEL: Scroll distance to assemble from Frame 0 to Frame 299
+  // ASSEMBLY_TRAVEL: Scroll distance to assemble from Frame 0 to Frame 299 (slowed down for smooth mobile scrubbing)
   // HOLD_TRAVEL: Scroll distance to hold fully assembled robot in view
   // RELEASE_MARGIN: Breathing room before philosophy section enters
-  const ASSEMBLY_TRAVEL = 280;
-  const HOLD_TRAVEL = 60;
+  const ASSEMBLY_TRAVEL = 440;
+  const HOLD_TRAVEL = 80;
   const TOTAL_HERO_TRAVEL = ASSEMBLY_TRAVEL + HOLD_TRAVEL;
 
   // Mobile scroll scrubbing controller
@@ -241,8 +241,8 @@ export const MobileHero: React.FC<MobileHeroProps> = ({ onStartProject }) => {
       const scrollY = window.scrollY || window.pageYOffset || 0;
 
       // Hero Content Fade & Translate:
-      // Over the first 140px of scroll, the text smoothly fades and rises slightly
-      const fadeProgress = Math.max(0, Math.min(1, scrollY / 140));
+      // Over the first 200px of scroll, the text smoothly fades and rises slightly
+      const fadeProgress = Math.max(0, Math.min(1, scrollY / 200));
       setContentOpacity(1 - fadeProgress);
       setContentTranslateY(-fadeProgress * 28);
 

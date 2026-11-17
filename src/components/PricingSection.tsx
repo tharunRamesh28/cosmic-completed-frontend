@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, ArrowRight } from 'lucide-react';
+import { PixelCard } from './PixelCard';
 
 interface PricingSectionProps {
   onSelectTier: (tierName: string) => void;
@@ -67,21 +68,39 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectTier }) 
       {/* Packages Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5 sm:gap-6 lg:gap-8 mb-5 sm:mb-10">
         {packages.map((pkg) => (
-          <div
+          <PixelCard
             key={pkg.id}
-            className={`bg-[#ffffff] rounded-xl p-4 sm:p-7 lg:p-8 flex flex-col justify-between transition-all duration-200 relative ${
+            theme="light"
+            variant={pkg.highlighted ? 'cosmic' : 'default'}
+            colors={
               pkg.highlighted
-                ? 'border-2 border-[#000000] shadow-sm ring-1 ring-[#c8f179]'
-                : 'border border-[#c4c7c7]/60 shadow-xs hover:border-black'
+                ? ['#84cc16', '#a3e635', '#bef264', '#4ade80', '#65a30d']
+                : ['#84cc16', '#a3e635', '#bef264', '#4ade80', '#94a3b8']
+            }
+            gap={6}
+            speed={28}
+            pixelSize={2.6}
+            shape="square"
+            spotlight={pkg.highlighted ? 0.65 : 0.52}
+            glow={pkg.highlighted ? 0.55 : 0.42}
+            glowColor="#a3e635"
+            opacity={0.72}
+            intro={true}
+            introDelay={120}
+            radius={16}
+            className={`bg-white p-4 sm:p-7 lg:p-8 flex flex-col justify-between transition-all duration-300 relative ${
+              pkg.highlighted
+                ? 'border-2 border-[#000000] shadow-md ring-1 ring-[#c8f179]'
+                : 'border border-[#c4c7c7]/70 shadow-xs hover:border-black hover:shadow-sm'
             }`}
           >
             {pkg.highlighted && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#c8f179] text-[#141f00] font-mono-tech text-[9px] sm:text-[10px] uppercase font-bold px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full border border-black shadow-xs">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#c8f179] text-[#141f00] font-mono-tech text-[9px] sm:text-[10px] uppercase font-bold px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full border border-black shadow-xs z-30 pointer-events-none">
                 RECOMMENDED
               </div>
             )}
 
-            <div>
+            <div className="relative z-10">
               {/* Package Name & Timeline */}
               <div className="mb-2 sm:mb-4">
                 <span className="font-mono-tech text-[10px] sm:text-[11px] text-[#476800] uppercase font-bold tracking-wider block mb-0.5 sm:mb-1">
@@ -93,7 +112,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectTier }) 
               </div>
 
               {/* Timeline Pill */}
-              <div className="flex items-center gap-2 font-mono-tech text-[11px] sm:text-xs text-[#191c1b] font-bold bg-[#f4fbe9] border border-[#c8f179] px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg mb-3 sm:mb-5 w-fit">
+              <div className="flex items-center gap-2 font-mono-tech text-[11px] sm:text-xs text-[#191c1b] font-bold bg-[#f4fbe9]/90 backdrop-blur-2xs border border-[#c8f179] px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg mb-3 sm:mb-5 w-fit">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#476800]" />
                 <span>TIMELINE: {pkg.timeline}</span>
               </div>
@@ -117,18 +136,21 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectTier }) 
             </div>
 
             {/* Action CTA Button */}
-            <button
-              onClick={() => onSelectTier(pkg.name)}
-              className={`w-full font-mono-tech text-xs tracking-wider px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-lg flex justify-between items-center transition-all cursor-pointer font-bold ${
-                pkg.highlighted
-                  ? 'bg-[#000000] text-white hover:bg-[#2e312f]'
-                  : 'bg-transparent border border-[#000000] text-[#000000] hover:bg-[#edeeeb]'
-              }`}
-            >
-              <span>{pkg.cta}</span>
-              <ArrowRight className="w-4 h-4 text-[#c8f179]" />
-            </button>
-          </div>
+            <div className="relative z-10 pt-2">
+              <button
+                type="button"
+                onClick={() => onSelectTier(pkg.name)}
+                className={`w-full font-mono-tech text-xs tracking-wider px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-lg flex justify-between items-center transition-all cursor-pointer font-bold ${
+                  pkg.highlighted
+                    ? 'bg-[#000000] text-white hover:bg-[#2e312f]'
+                    : 'bg-white/80 backdrop-blur-2xs border border-[#000000] text-[#000000] hover:bg-[#000000] hover:text-[#c8f179]'
+                }`}
+              >
+                <span>{pkg.cta}</span>
+                <ArrowRight className="w-4 h-4 text-[#c8f179]" />
+              </button>
+            </div>
+          </PixelCard>
         ))}
       </div>
 
