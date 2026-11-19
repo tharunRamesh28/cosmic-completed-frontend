@@ -68,27 +68,9 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectTier }) 
       {/* Packages Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5 sm:gap-6 lg:gap-8 mb-5 sm:mb-10">
         {packages.map((pkg) => (
-          <PixelCard
+          <div
             key={pkg.id}
-            theme="light"
-            variant={pkg.highlighted ? 'cosmic' : 'default'}
-            colors={
-              pkg.highlighted
-                ? ['#84cc16', '#a3e635', '#bef264', '#4ade80', '#65a30d']
-                : ['#84cc16', '#a3e635', '#bef264', '#4ade80', '#94a3b8']
-            }
-            gap={6}
-            speed={28}
-            pixelSize={2.6}
-            shape="square"
-            spotlight={pkg.highlighted ? 0.65 : 0.52}
-            glow={pkg.highlighted ? 0.55 : 0.42}
-            glowColor="#a3e635"
-            opacity={0.72}
-            intro={true}
-            introDelay={120}
-            radius={16}
-            className={`bg-white p-4 sm:p-7 lg:p-8 flex flex-col justify-between transition-all duration-300 relative ${
+            className={`bg-white rounded-2xl p-4 sm:p-7 lg:p-8 flex flex-col justify-between transition-all duration-300 relative ${
               pkg.highlighted
                 ? 'border-2 border-[#000000] shadow-md ring-1 ring-[#c8f179]'
                 : 'border border-[#c4c7c7]/70 shadow-xs hover:border-black hover:shadow-sm'
@@ -112,7 +94,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectTier }) 
               </div>
 
               {/* Timeline Pill */}
-              <div className="flex items-center gap-2 font-mono-tech text-[11px] sm:text-xs text-[#191c1b] font-bold bg-[#f4fbe9]/90 backdrop-blur-2xs border border-[#c8f179] px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg mb-3 sm:mb-5 w-fit">
+              <div className="flex items-center gap-2 font-mono-tech text-[11px] sm:text-xs text-[#191c1b] font-bold bg-[#f4fbe9]/90 border border-[#c8f179] px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg mb-3 sm:mb-5 w-fit">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#476800]" />
                 <span>TIMELINE: {pkg.timeline}</span>
               </div>
@@ -143,14 +125,14 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectTier }) 
                 className={`w-full font-mono-tech text-xs tracking-wider px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-lg flex justify-between items-center transition-all cursor-pointer font-bold ${
                   pkg.highlighted
                     ? 'bg-[#000000] text-white hover:bg-[#2e312f]'
-                    : 'bg-white/80 backdrop-blur-2xs border border-[#000000] text-[#000000] hover:bg-[#000000] hover:text-[#c8f179]'
+                    : 'bg-white border border-[#000000] text-[#000000] hover:bg-[#000000] hover:text-[#c8f179]'
                 }`}
               >
                 <span>{pkg.cta}</span>
                 <ArrowRight className="w-4 h-4 text-[#c8f179]" />
               </button>
             </div>
-          </PixelCard>
+          </div>
         ))}
       </div>
 

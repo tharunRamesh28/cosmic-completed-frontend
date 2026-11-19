@@ -9,7 +9,7 @@ interface DesktopHeroProps {
 }
 
 const TOTAL_FRAMES = 300;
-const MAX_CONCURRENT_LOADS = 4;
+const MAX_CONCURRENT_LOADS = 12;
 
 export const DesktopHero: React.FC<DesktopHeroProps> = ({ onStartProject }) => {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -21,6 +21,7 @@ export const DesktopHero: React.FC<DesktopHeroProps> = ({ onStartProject }) => {
   const whyChooseContainerRef = useRef<HTMLDivElement>(null);
   const whyChooseHeadingRef = useRef<HTMLDivElement>(null);
   const desktopCardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const stickyStageRef = useRef<HTMLDivElement>(null);
 
   const [reducedMotion, setReducedMotion] = useState<boolean>(false);
 
@@ -140,8 +141,8 @@ export const DesktopHero: React.FC<DesktopHeroProps> = ({ onStartProject }) => {
 
   // Dynamically prioritize nearby frames based on scroll position
   const prioritizeNearbyFrames = (centerFrame: number) => {
-    const range = 16;
-    const start = Math.max(0, centerFrame - 4);
+    const range = 30;
+    const start = Math.max(0, centerFrame - 10);
     const end = Math.min(TOTAL_FRAMES - 1, centerFrame + range);
 
     const highPriority: number[] = [];
@@ -321,6 +322,50 @@ export const DesktopHero: React.FC<DesktopHeroProps> = ({ onStartProject }) => {
           dEl.style.pointerEvents = ratio > 0.5 ? 'auto' : 'none';
         }
       });
+
+      // 7. Synchronized Overlapping Exit:
+      // When scrolling past 1.0 (into the "WHAT WE BUILD" section's entrance),
+      // the Hero content (cards, arm, heading) smoothly floats upward and fades out
+      // while "WHAT WE BUILD" is simultaneously entering the viewport.
+      let exitProgress = 0;
+      if (rawProgress > 1.0) {
+        exitProgress = Math.min(1, (rawProgress - 1.0) / 0.45);
+      }
+      const exitOpacity = Math.max(0, 1 - exitProgress);
+      const exitTranslateY = -exitProgress * 45;
+
+      if (exitProgress > 0) {
+        if (whyChooseContainerRef.current) {
+          whyChooseContainerRef.current.style.opacity = exitOpacity.toString();
+          whyChooseContainerRef.current.style.transform = `translate3d(0, ${exitTranslateY.toFixed(1)}px, 0)`;
+        }
+        if (robotWrapperRef.current) {
+          robotWrapperRef.current.style.opacity = exitOpacity.toString();
+          robotWrapperRef.current.style.transform = `translate3d(0, ${exitTranslateY.toFixed(1)}px, 0)`;
+        }
+        desktopCardRefs.current.forEach((dEl) => {
+          if (dEl) {
+            dEl.style.opacity = exitOpacity.toString();
+            dEl.style.transform = `translate3d(0, ${exitTranslateY.toFixed(1)}px, 0)`;
+            dEl.style.pointerEvents = exitOpacity > 0.1 ? 'auto' : 'none';
+          }
+        });
+        if (stickyStageRef.current) {
+          stickyStageRef.current.style.pointerEvents = exitOpacity > 0.1 ? 'auto' : 'none';
+          stickyStageRef.current.style.visibility = exitProgress >= 1.0 ? 'hidden' : 'visible';
+        }
+      } else {
+        if (whyChooseContainerRef.current) {
+          whyChooseContainerRef.current.style.transform = 'translate3d(0, 0px, 0)';
+        }
+        if (robotWrapperRef.current && clampedProgress >= 0.32) {
+          robotWrapperRef.current.style.transform = 'translate3d(0, 0px, 0)';
+        }
+        if (stickyStageRef.current) {
+          stickyStageRef.current.style.pointerEvents = 'auto';
+          stickyStageRef.current.style.visibility = 'visible';
+        }
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -350,16 +395,17 @@ export const DesktopHero: React.FC<DesktopHeroProps> = ({ onStartProject }) => {
         id="hero-scroll-track-desktop"
         className="relative w-full"
         style={{
-          height: reducedMotion ? 'auto' : '260vh',
+          height: reducedMotion ? 'auto' : '185vh',
         }}
       >
         {/* Sticky Full-Viewport Stage */}
         <div
+          ref={stickyStageRef}
           className={`${
             reducedMotion
               ? 'relative min-h-[90vh] py-12'
               : 'sticky top-0 h-screen'
-          } w-full flex flex-col items-center justify-center px-6 lg:px-12 z-10 overflow-hidden relative`}
+          } w-full flex flex-col items-center justify-center px-6 lg:px-12 z-20 overflow-hidden relative`}
         >
           {/* ROBOTIC ARM CANVAS: Centered in stage between cards with controlled boundaries */}
           <div
@@ -509,6 +555,13 @@ export const DesktopHero: React.FC<DesktopHeroProps> = ({ onStartProject }) => {
               <h2 className="font-display-tech text-3xl lg:text-4xl xl:text-[42px] font-extrabold text-[#000000] tracking-tight">
                 WHY CHOOSE <span className="text-[#476800]">ZEN TECH SOLUTIONS</span>?
               </h2>
+              {/* Subtle Scroll to Explore More Cue */}
+              <div className="flex items-center justify-center gap-2 mt-2 opacity-65">
+                <span className="font-mono-tech text-[10px] tracking-[0.2em] uppercase text-[#717572] font-semibold">
+                  Scroll to explore more
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#476800] animate-pulse" />
+              </div>
             </div>
 
             {/* FOUR-CORNER COMPOSITION (Arm centered unobstructed between cards) */}

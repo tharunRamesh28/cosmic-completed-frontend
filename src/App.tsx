@@ -15,6 +15,7 @@ import { ProjectModal } from './components/ProjectModal';
 import { ShaderBackground } from './components/ShaderBackground';
 import ClickSpark from './components/ClickSpark';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { useLenis } from './lib/useLenis';
 
 // Route-level code-splitting for performance
 const WorksPage = React.lazy(() => import('./pages/WorksPage').then(m => ({ default: m.WorksPage })));
@@ -42,6 +43,9 @@ const RouteLoadingFallback = () => (
 function AppContent() {
   const { path, navigate } = useRouter();
   const { user, loading, isAdmin } = useAuth();
+
+  // Initialize production-grade luxury smooth scrolling
+  useLenis();
 
   const [isCircuitShaderActive, setIsCircuitShaderActive] = useState<boolean>(false);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false);

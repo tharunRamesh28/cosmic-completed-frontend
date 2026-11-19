@@ -141,8 +141,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[150] bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
-      <div className="bg-[#ffffff] text-[#191c1b] border border-[#c4c7c7] rounded-xl max-w-3xl w-full p-6 sm:p-10 shadow-2xl relative my-8 max-h-[92vh] overflow-y-auto">
+    <div data-lenis-prevent className="fixed inset-0 z-[150] bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200 overscroll-contain">
+      <div data-lenis-prevent className="bg-[#ffffff] text-[#191c1b] border border-[#c4c7c7] rounded-xl max-w-3xl w-full p-6 sm:p-10 shadow-2xl relative my-8 max-h-[92vh] overflow-y-auto overscroll-contain">
         {/* Close Button */}
         <button
           onClick={onClose}

@@ -369,3 +369,10 @@
   outline: 2px solid #476800;
   outline-offset: 2px;
 }
+
+/* Seamless Desktop Overlap Transition between Hero and What We Build */
+@media (min-width: 1024px) {
+  #services {
+    margin-top: -100vh;
+  }
+}

@@ -238,6 +238,7 @@ export const PixelCard: React.FC<PixelCardProps> = ({
       last: 0,
       time: 0,
       visible: true,
+      isScrolling: false,
       width: 0,
       height: 0,
       ratio: 1,
@@ -374,6 +375,7 @@ export const PixelCard: React.FC<PixelCardProps> = ({
       }
 
       let presenceSum = 0;
+      let isPresenceChanging = false;
       const elapsed = state.time - state.changedAt;
       const appearStep = state.dt / APPEAR;
       const exitStep = state.dt / EXIT;
@@ -381,12 +383,26 @@ export const PixelCard: React.FC<PixelCardProps> = ({
         const current = state.presence[i];
         const ready = elapsed >= state.delay[i] || reduce;
         const target = state.active ? (ready ? 1 : 0) : ready ? 0 : current;
-        if (reduce) state.presence[i] = target;
-        else if (target > current) state.presence[i] = Math.min(1, current + appearStep);
-        else if (target < current) state.presence[i] = Math.max(0, current - exitStep);
+        if (reduce) {
+          state.presence[i] = target;
+        } else if (target > current) {
+          const next = Math.min(1, current + appearStep);
+          state.presence[i] = next;
+          if (next < target) isPresenceChanging = true;
+        } else if (target < current) {
+          const next = Math.max(0, current - exitStep);
+          state.presence[i] = next;
+          if (next > target) isPresenceChanging = true;
+        }
         presenceSum += state.presence[i];
       }
       const presenceAvg = state.count ? presenceSum / state.count : 0;
+
+      // Early exit if completely dormant (no pixels, no spotlight, no pulses)
+      if (presenceAvg <= 0.001 && state.spotPower <= 0.001 && state.pulses.length === 0) {
+        ctx.clearRect(0, 0, width, height);
+        return { presenceSum: 0, isPresenceChanging };
+      }
 
       if (s.glow > 0 && presenceAvg > 0.001) {
         const [r, g, b] = s.glowColor;
@@ -462,7 +478,7 @@ export const PixelCard: React.FC<PixelCardProps> = ({
         }
       }
       ctx.globalAlpha = 1;
-      return presenceSum;
+      return { presenceSum, isPresenceChanging };
     };
 
     const frame = (now: number) => {
@@ -473,7 +489,9 @@ export const PixelCard: React.FC<PixelCardProps> = ({
       state.last = now;
       state.dt = dt;
       state.time += dt;
-      build();
+
+      // NOTE: build() removed from frame() to eliminate layout thrashing during scroll.
+      // build() is handled by ResizeObserver when container dimensions change.
 
       if (state.introAt >= 0 && state.time >= state.introAt) {
         state.introAt = -1;
@@ -504,16 +522,24 @@ export const PixelCard: React.FC<PixelCardProps> = ({
         return pulse.power > 0;
       });
 
-      const presence = draw();
+      const { isPresenceChanging } = draw();
+
+      const isSpotActive = state.spotPower > 0.002 || Math.abs(state.spotVX) + Math.abs(state.spotVY) > 0.4;
+      const hasPulses = state.pulses.length > 0;
+      const hasIntro = state.introAt >= 0;
+
+      // Only continue animating if pixels, spotlight, or pulses are actively changing
       const settling =
-        state.active ||
-        state.introAt >= 0 ||
-        presence > 0 ||
-        state.pulses.length > 0 ||
-        state.spotPower > 0.002 ||
-        Math.abs(state.spotVX) + Math.abs(state.spotVY) > 0.5;
-      if (settling && state.visible) state.raf = requestAnimationFrame(frame);
-      else state.last = 0;
+        isPresenceChanging ||
+        (state.hovering && isSpotActive) ||
+        hasPulses ||
+        hasIntro;
+
+      if (settling && state.visible && (!state.isScrolling || state.hovering)) {
+        state.raf = requestAnimationFrame(frame);
+      } else {
+        state.last = 0;
+      }
     };
 
     const wake = () => {
@@ -617,6 +643,17 @@ export const PixelCard: React.FC<PixelCardProps> = ({
     container.addEventListener('keydown', onKey);
     document.addEventListener('pointerdown', onOutside);
 
+    let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
+    const handleScroll = () => {
+      state.isScrolling = true;
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        state.isScrolling = false;
+        if (state.hovering || state.active) wake();
+      }, 90);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
     const resizeObserver = new ResizeObserver(() => {
       build();
       wake();
@@ -657,14 +694,15 @@ export const PixelCard: React.FC<PixelCardProps> = ({
       container.removeEventListener('pointerdown', onDown);
       container.removeEventListener('keydown', onKey);
       document.removeEventListener('pointerdown', onOutside);
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
       engineRef.current = null;
     };
   }, []);
 
   useEffect(() => {
     engineRef.current?.sync();
-    engineRef.current?.wake();
-  });
+  }, [variant, theme, trigger]);
 
   return (
     <div
@@ -683,7 +721,8 @@ export const PixelCard: React.FC<PixelCardProps> = ({
         className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-[inherit]"
       >
         <canvas
-          className="pointer-events-none absolute inset-0 block h-full w-full"
+          className="pointer-events-none absolute inset-0 block h-full w-full will-change-transform"
+          style={{ transform: 'translateZ(0)' }}
           ref={canvasRef}
           aria-hidden="true"
         />

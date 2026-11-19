@@ -34,7 +34,8 @@ export const HeroParallax: React.FC<HeroParallaxProps> = ({
     offset: ['start start', 'end start'],
   });
 
-  const springConfig = { stiffness: 300, damping: 30, bounce: 100 };
+  // Snappy, non-oscillating spring config to prevent frame jank
+  const springConfig = { stiffness: 450, damping: 45, mass: 0.8 };
 
   // Horizontal parallax motion values
   const translateX = useSpring(
@@ -77,8 +78,9 @@ export const HeroParallax: React.FC<HeroParallaxProps> = ({
           rotateZ,
           translateY,
           opacity,
+          transformStyle: 'preserve-3d',
         }}
-        className="will-change-transform"
+        className="will-change-transform [transform:translateZ(0)]"
       >
         {/* ROW 1: Moves right as user scrolls down */}
         <motion.div className="flex flex-row-reverse space-x-reverse space-x-8 sm:space-x-12 mb-10 sm:mb-16">
@@ -135,7 +137,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         y: -15,
       }}
       key={product.title}
-      className="group/product h-48 sm:h-64 md:h-72 lg:h-80 w-[16rem] sm:w-[22rem] md:w-[26rem] lg:w-[30rem] relative shrink-0 rounded-2xl overflow-hidden border border-[#c4c7c7]/60 bg-white shadow-sm hover:shadow-[0_20px_50px_rgba(71,104,0,0.12)] hover:border-[#476800] transition-all duration-300"
+      className="group/product h-48 sm:h-64 md:h-72 lg:h-80 w-[16rem] sm:w-[22rem] md:w-[26rem] lg:w-[30rem] relative shrink-0 rounded-2xl overflow-hidden border border-[#c4c7c7]/60 bg-white shadow-sm hover:border-[#476800] transition-colors duration-200 [transform:translateZ(0)]"
     >
       <a
         href={product.link}
@@ -145,11 +147,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           src={product.thumbnail}
           height="600"
           width="800"
-          className="object-contain h-full w-full transition-transform duration-700 ease-out group-hover/product:scale-[1.03]"
+          className="object-contain h-full w-full transition-transform duration-300 ease-out group-hover/product:scale-[1.03]"
           alt={product.title}
           loading="lazy"
+          decoding="async"
         />
-        <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-90 bg-white/90 backdrop-blur-xs transition-opacity duration-300 pointer-events-none flex items-end p-5" />
+        <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-90 bg-white/90 transition-opacity duration-200 pointer-events-none flex items-end p-5" />
         <h2 className="absolute bottom-5 left-5 opacity-0 group-hover/product:opacity-100 text-[#000000] font-display-tech font-black text-lg sm:text-xl tracking-tight transition-opacity duration-300 pointer-events-none">
           {product.title}
         </h2>

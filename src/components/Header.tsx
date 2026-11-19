@@ -61,15 +61,18 @@ export const Header: React.FC<HeaderProps> = ({
     navigate('/login');
   };
 
-  // Lock body scroll when navigation menu is open
+  // Lock body scroll and pause smooth scroll (Lenis) when navigation menu is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      (window as any).__lenis?.stop();
     } else {
       document.body.style.overflow = '';
+      (window as any).__lenis?.start();
     }
     return () => {
       document.body.style.overflow = '';
+      (window as any).__lenis?.start();
     };
   }, [isOpen]);
 
@@ -243,7 +246,8 @@ export const Header: React.FC<HeaderProps> = ({
       {isOpen && (
         <div
           id="cosmic-navigation-overlay"
-          className={`fixed inset-0 z-[100] bg-[#f9faf7] text-[#191c1b] flex flex-col justify-between overflow-y-auto ${isClosing ? 'animate-menu-out' : 'animate-menu-in'
+          data-lenis-prevent
+          className={`fixed inset-0 z-[100] bg-[#f9faf7] text-[#191c1b] flex flex-col justify-between overflow-y-auto overscroll-contain touch-pan-y ${isClosing ? 'animate-menu-out' : 'animate-menu-in'
             }`}
         >
           <div className="w-full max-w-[1440px] mx-auto px-6 md:px-16 py-6 md:py-8 flex flex-col justify-between min-h-screen">
