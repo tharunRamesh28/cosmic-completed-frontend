@@ -286,12 +286,12 @@ export const AboutPage: React.FC = () => {
 
               {/* LAYER 3: Foreground Card with Photo & Details */}
               <div className="relative z-20 bg-white border border-[#c4c7c7]/60 rounded-xl overflow-hidden shadow-xs hover:border-black transition-all duration-300 flex flex-col justify-between group h-full">
-                {/* Photo with Grayscale to Color Hover Transition (Opaque Foreground Mask) */}
+                {/* Photo with Grayscale to Color Hover Transition on Desktop, Full Original Color on Mobile */}
                 <div className="aspect-[4/3] bg-[#f3f4f1] overflow-hidden relative shrink-0">
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-[filter] duration-500 ease-in-out"
+                    className="w-full h-full object-cover filter md:grayscale md:group-hover:grayscale-0 transition-[filter] duration-500 ease-in-out"
                   />
                 </div>
 
