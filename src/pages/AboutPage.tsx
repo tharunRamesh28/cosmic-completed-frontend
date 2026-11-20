@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import karthikPhoto from '../../projects/members/karthik.png';
 import tharunPhoto from '../../projects/members/tharun.png';
 import cooPhoto from '../../projects/members/coo.png';
+import vinnarasuPhoto from '../../projects/members/vinnarasu.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -146,7 +147,7 @@ export const AboutPage: React.FC = () => {
   const teamMembers = [
     {
       name: 'Karthik Arjun',
-      role: 'FOUNDER & CEO',
+      role: 'FOUNDER',
       behindLabel: 'FOUNDER',
       description: 'CAD Designer, Embedded Engineer and Hardware Verification Engineer',
       image: karthikPhoto,
@@ -158,7 +159,7 @@ export const AboutPage: React.FC = () => {
     },
     {
       name: 'Tharun',
-      role: 'CO-FOUNDER & CTO',
+      role: 'CO-FOUNDER',
       behindLabel: 'CO-FOUNDER',
       description: 'IoT Engineer, Full Stack Developer, Software Testing and Verification Engineer',
       image: tharunPhoto,
@@ -170,9 +171,8 @@ export const AboutPage: React.FC = () => {
     },
     {
       name: 'Navadeep',
-      role: 'COO',
-      designation: 'CHIEF OPERATING OFFICER',
-      behindLabel: 'COO',
+      role: 'CORE TEAM',
+      behindLabel: 'CORE TEAM',
       description: 'Finance, Product Strategy and Business Development',
       image: cooPhoto,
       socials: {
@@ -180,14 +180,26 @@ export const AboutPage: React.FC = () => {
         linkedin: 'https://www.linkedin.com/in/navadeep-jinugu-258446387?utm_source=share_via&utm_content=profile&utm_medium=member_android',
         email: 'mailto:jinugunavadeep@gmail.com'
       }
+    },
+    {
+      name: 'Vinnarasu',
+      role: 'CORE TEAM',
+      behindLabel: 'CORE TEAM',
+      description: 'Core Engineering, Research and Product Development',
+      image: vinnarasuPhoto,
+      socials: {
+        instagram: 'https://www.instagram.com/vinn___03?hvrq=ZnhpeDE0Y2M1bnlk',
+        linkedin: 'https://www.linkedin.com/in/vinnarasu-r?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+        email: 'mailto:r.vinnarasu2006@gmail.com'
+      }
     }
   ];
 
   const getTypographyClass = (label: string) => {
-    if (label === 'COO') {
-      return 'text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black tracking-widest';
+    if (label === 'CORE TEAM') {
+      return 'text-xl sm:text-2xl md:text-3xl lg:text-2xl xl:text-3xl font-black tracking-tight';
     }
-    return 'text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl font-black tracking-tight';
+    return 'text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl font-black tracking-tight';
   };
 
   return (
@@ -255,15 +267,13 @@ export const AboutPage: React.FC = () => {
           </p>
         </div>
 
-        {/* 3-Card Balanced Horizontal Row on Desktop, Adaptive on Tablet & Mobile */}
-        <div ref={cardsContainerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-[1240px] mx-auto items-stretch pt-4">
+        {/* 4-Card Balanced Horizontal Row on Desktop, Adaptive on Tablet & Mobile */}
+        <div ref={cardsContainerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-[1380px] mx-auto items-stretch pt-4">
           {teamMembers.map((member, index) => (
             <div
               key={member.name}
               ref={(el) => (cardRefs.current[index] = el)}
-              className={`relative flex flex-col h-full pt-20 sm:pt-24 lg:pt-28 ${
-                index === 2 ? 'sm:col-span-2 sm:max-w-[420px] sm:mx-auto lg:col-span-1 lg:max-w-none' : ''
-              }`}
+              className="relative flex flex-col h-full pt-20 sm:pt-24 lg:pt-28"
             >
               {/* LAYER 2: Oversized Behind-the-Image Typography */}
               <div
@@ -302,7 +312,7 @@ export const AboutPage: React.FC = () => {
                       {member.name}
                     </h3>
                     <div className="font-mono-tech text-xs text-[#74a81e] font-semibold mb-2">
-                      {member.role === 'COO' ? 'COO // CHIEF OPERATING OFFICER' : member.role}
+                      {member.role}
                     </div>
                     {member.description && (
                       <p className="font-display-tech text-sm text-[#444748] leading-relaxed">
