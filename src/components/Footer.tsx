@@ -6,8 +6,8 @@ import { ZenTechLogo } from './ZenTechLogo';
 
 // Social navigation links (ready for URLs to be added)
 const SOCIAL_LINKS = {
-  instagram: '#',
-  email: '#',
+  instagram: 'https://www.instagram.com/zentech_sloutions?gwpx=ZmFpcWM4dWpxYWZh',
+  email: 'mailto:Zentechsloutionss@gmail.com',
   linkedin: '#',
 };
 
