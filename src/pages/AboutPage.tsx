@@ -152,7 +152,7 @@ export const AboutPage: React.FC = () => {
       description: 'CAD Designer, Embedded Engineer and Hardware Verification Engineer',
       image: karthikPhoto,
       socials: {
-        instagram: 'https://www.instagram.com/cosmic_circuits_',
+        instagram: 'https://www.instagram.com/karthik_arjun_8?dmpr=MWtqNXZqcGVzMXczZA==',
         linkedin: 'https://www.linkedin.com/in/karthik-arjun-kalavakunta-14b7b7397?utm_source=share_via&utm_content=profile&utm_medium=member_android',
         email: 'mailto:kalavakuntakarthik8@gmail.com'
       }
@@ -164,7 +164,7 @@ export const AboutPage: React.FC = () => {
       description: 'IoT Engineer, Full Stack Developer, Software Testing and Verification Engineer',
       image: tharunPhoto,
       socials: {
-        instagram: 'https://www.instagram.com/cosmic_circuits_',
+        instagram: 'https://www.instagram.com/tharun_25_07_?fqnt=MWEwbGl1NHIyZTVtMw==',
         linkedin: 'https://www.linkedin.com/in/tharun-ramesh25',
         email: 'mailto:rameshtharun067@gmail.com'
       }
