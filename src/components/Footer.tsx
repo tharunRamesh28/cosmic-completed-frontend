@@ -1,6 +1,6 @@
 import React from 'react';
 import { CursorGrid } from './CursorGrid';
-import { ArrowUpRight, Instagram, Mail, Linkedin } from 'lucide-react';
+import { ArrowUpRight, Instagram, Mail, Linkedin, Phone } from 'lucide-react';
 import { Link, useRouter } from '../router';
 import { ZenTechLogo } from './ZenTechLogo';
 
@@ -10,6 +10,11 @@ const SOCIAL_LINKS = {
   email: 'mailto:Zentechsloutionss@gmail.com',
   linkedin: '#',
 };
+
+const CONTACT_PHONES = [
+  { label: '+91 7358844091', href: 'tel:+917358844091' },
+  { label: '+91 8885664818', href: 'tel:+918885664818' },
+];
 
 interface FooterProps {
   onStartProject?: () => void;
@@ -129,6 +134,25 @@ export const Footer: React.FC<FooterProps> = ({ onStartProject }) => {
               >
                 <Linkedin className="w-4 h-4" />
               </a>
+            </div>
+
+            {/* Direct Phone / Contact Numbers */}
+            <div className="flex flex-col gap-1.5 pt-1 font-mono-tech text-xs">
+              <span className="text-neutral-500 uppercase tracking-wider text-[11px] font-bold flex items-center gap-1.5">
+                <Phone className="w-3 h-3 text-[#c8f179]" />
+                CONTACT
+              </span>
+              <div className="flex flex-col gap-1 text-neutral-300">
+                {CONTACT_PHONES.map((phone) => (
+                  <a
+                    key={phone.label}
+                    href={phone.href}
+                    className="hover:text-[#c8f179] transition-colors tracking-wide"
+                  >
+                    {phone.label}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
 
