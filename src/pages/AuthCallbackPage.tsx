@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CursorGrid } from '../components/CursorGrid';
-import { supabase, AUTHORIZED_ADMIN_UUID } from '../lib/supabase';
+import { supabase, isAuthorizedAdmin } from '../lib/supabase';
 import { useRouter } from '../router';
 import { AlertCircle } from 'lucide-react';
 
@@ -29,7 +29,7 @@ export const AuthCallbackPage: React.FC = () => {
         }
 
         if (currentUser) {
-          if (currentUser.id === AUTHORIZED_ADMIN_UUID) {
+          if (isAuthorizedAdmin(currentUser)) {
             navigate('/admin');
           } else {
             navigate('/');
@@ -39,7 +39,7 @@ export const AuthCallbackPage: React.FC = () => {
           const { data: authListener } = supabase.auth.onAuthStateChange((_event, newSession) => {
             if (newSession && newSession.user) {
               authListener.subscription.unsubscribe();
-              if (newSession.user.id === AUTHORIZED_ADMIN_UUID) {
+              if (isAuthorizedAdmin(newSession.user)) {
                 navigate('/admin');
               } else {
                 navigate('/');

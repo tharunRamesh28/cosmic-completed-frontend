@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase, AUTHORIZED_ADMIN_UUID } from './supabase';
+import { supabase, isAuthorizedAdmin } from './supabase';
 import { useRouter } from '../router';
 
 export function useAdminAuth(requireAuth = true) {
@@ -16,8 +16,8 @@ export function useAdminAuth(requireAuth = true) {
       return false;
     }
 
-    // Step 1: Check user ID matches the authorized admin UUID
-    if (user.id !== AUTHORIZED_ADMIN_UUID) {
+    // Step 1: Check user ID or email matches designated admin credentials
+    if (!isAuthorizedAdmin(user)) {
       setIsAdmin(false);
       setAdminUser(null);
       setAuthError('Unauthorized: User is not the designated administrator.');

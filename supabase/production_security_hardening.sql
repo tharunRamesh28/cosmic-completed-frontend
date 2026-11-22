@@ -66,9 +66,9 @@ REVOKE EXECUTE ON FUNCTION public.is_admin() FROM public;
 GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
 
 -- Ensure the designated admin is registered in public.admin_users
-INSERT INTO public.admin_users (user_id)
-VALUES ('3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::uuid)
-ON CONFLICT (user_id) DO NOTHING;
+INSERT INTO public.admin_users (user_id, email)
+VALUES ('3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::uuid, 'zentechsolutionss@gmail.com')
+ON CONFLICT (user_id) DO UPDATE SET email = EXCLUDED.email;
 
 -- Revoke previous/obsolete admin access if present
 DELETE FROM public.admin_users

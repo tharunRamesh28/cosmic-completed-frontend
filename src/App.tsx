@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { RouterProvider, useRouter, Link } from './router';
 import { AuthProvider, useAuth } from './lib/AuthContext';
-import { AUTHORIZED_ADMIN_UUID } from './lib/supabase';
+import { isAuthorizedAdmin } from './lib/supabase';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { PhaseSequence } from './components/PhaseSequence';
@@ -80,7 +80,7 @@ function AppContent() {
         </React.Suspense>
       );
     }
-    if (user.id !== AUTHORIZED_ADMIN_UUID) {
+    if (!isAuthorizedAdmin(user)) {
       // Authenticated user but not admin -> redirect to normal home page
       window.location.replace('/');
       return null;

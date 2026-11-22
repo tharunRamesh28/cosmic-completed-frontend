@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-import { supabase, AUTHORIZED_ADMIN_UUID } from './supabase';
+import { supabase, isAuthorizedAdmin } from './supabase';
 
 interface AuthContextType {
   user: User | null;
@@ -34,7 +34,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const checkAdminStatus = async (currentUser: User | null): Promise<boolean> => {
     if (!currentUser) return false;
-    return currentUser.id === AUTHORIZED_ADMIN_UUID;
+    return isAuthorizedAdmin(currentUser);
   };
 
   const refreshSession = async () => {

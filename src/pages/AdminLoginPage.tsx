@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Lock, Mail, ArrowRight, AlertCircle, ArrowLeft } from 'lucide-react';
-import { supabase, AUTHORIZED_ADMIN_UUID } from '../lib/supabase';
+import { supabase, isAuthorizedAdmin } from '../lib/supabase';
 import { useRouter, Link } from '../router';
 import { validateEmail, checkSubmissionRateLimit, recordSubmissionTimestamp } from '../lib/validators';
 
@@ -18,7 +18,7 @@ export const AdminLoginPage: React.FC = () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
-          if (session.user.id === AUTHORIZED_ADMIN_UUID) {
+          if (isAuthorizedAdmin(session.user)) {
             const { data: adminRecord } = await supabase
               .from('admin_users')
               .select('user_id')
@@ -83,8 +83,8 @@ export const AdminLoginPage: React.FC = () => {
         return;
       }
 
-      // 1. Check UUID match
-      if (user.id !== AUTHORIZED_ADMIN_UUID) {
+      // 1. Check UUID or Email match
+      if (!isAuthorizedAdmin(user)) {
         await supabase.auth.signOut();
         setErrorMsg('Unauthorized access: This account does not have administrative privileges.');
         setLoading(false);

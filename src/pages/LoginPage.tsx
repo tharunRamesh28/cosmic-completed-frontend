@@ -6,7 +6,7 @@ import {
   ArrowLeft,
   Info
 } from 'lucide-react';
-import { supabase, AUTHORIZED_ADMIN_UUID } from '../lib/supabase';
+import { supabase, isAuthorizedAdmin } from '../lib/supabase';
 import { useRouter } from '../router';
 import { ZenTechLogo } from '../components/ZenTechLogo';
 
@@ -43,7 +43,7 @@ export const LoginPage: React.FC = () => {
       }
 
       if (data?.user) {
-        if (data.user.id === AUTHORIZED_ADMIN_UUID) {
+        if (isAuthorizedAdmin(data.user)) {
           navigate('/admin');
         } else {
           navigate('/');

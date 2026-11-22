@@ -12,6 +12,14 @@ export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
 });
 
 export const AUTHORIZED_ADMIN_UUID = '3f50b8c1-ccfa-4da9-885d-c4e0f61430dc';
+export const AUTHORIZED_ADMIN_EMAIL = 'zentechsolutionss@gmail.com';
+
+export function isAuthorizedAdmin(user: { id?: string | null; email?: string | null } | null | undefined): boolean {
+  if (!user) return false;
+  if (user.id === AUTHORIZED_ADMIN_UUID) return true;
+  if (user.email && user.email.toLowerCase() === AUTHORIZED_ADMIN_EMAIL.toLowerCase()) return true;
+  return false;
+}
 
 export interface ProjectSubmission {
   id: string;
