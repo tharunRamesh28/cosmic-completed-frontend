@@ -21,7 +21,7 @@ BEGIN
   END IF;
 
   -- 3. Verify Admin Authorization (Using the hardcoded admin UUID from the project)
-  IF v_user_id != '11ce9252-c48d-4a53-b1c3-dbb093678268'::UUID THEN
+  IF v_user_id != '3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::UUID THEN
     RETURN json_build_object('success', false, 'error', 'NOT_ADMIN', 'message', 'You are not authorized to delete this project.');
   END IF;
 
