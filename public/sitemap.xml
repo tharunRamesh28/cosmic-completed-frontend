@@ -1,39 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Core Public Pages -->
   <url>
-    <loc>https://tiny-dieffenbachia-8126ed.netlify.app/</loc>
+    <loc>https://zentechsolutionss.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://tiny-dieffenbachia-8126ed.netlify.app/works</loc>
+    <loc>https://zentechsolutionss.com/works</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://tiny-dieffenbachia-8126ed.netlify.app/works/autonomous-delivery-robot</loc>
+    <loc>https://zentechsolutionss.com/services</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tiny-dieffenbachia-8126ed.netlify.app/services</loc>
+    <loc>https://zentechsolutionss.com/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tiny-dieffenbachia-8126ed.netlify.app/pricing</loc>
+    <loc>https://zentechsolutionss.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tiny-dieffenbachia-8126ed.netlify.app/about</loc>
+    <loc>https://zentechsolutionss.com/order</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Project Detail Case Studies -->
+  <url>
+    <loc>https://zentechsolutionss.com/works/autonomous-delivery-robot</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://tiny-dieffenbachia-8126ed.netlify.app/order</loc>
+    <loc>https://zentechsolutionss.com/works/automatic-lpg-gas-leak-detection-safety-system</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/bluetooth-controlled-robotic-arm</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/smart-medicine-reminder-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/smart-flood-detection-early-warning-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/color-detection-identification-system-using-esp32-cam</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/automatic-fire-fighting-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/automatic-home-automation-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/chill-chain-smart-milk-quality-vendor-tracking-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/smart-air-quality-multi-gas-monitoring-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/smart-automatic-clothes-collector-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/smart-energy-monitoring-automatic-lighting</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/smart-irrigation-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/smart-parking-management-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/smart-patient-bed-fall-detection-alert-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/sound-reactive-led-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/temperature-monitoring-sms-alert-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zentechsolutionss.com/works/vehicle-cabin-air-quality-monitoring-smart-purification-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
-
