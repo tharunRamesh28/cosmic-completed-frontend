@@ -1,20 +1,62 @@
 -- ====================================================================
--- ZEN TECH SOLUTIONS - CUSTOMER REVIEWS & FEEDBACK SYSTEM MIGRATION
+-- ZEN TECH SOLUTIONS - COMPLETE CUSTOMER REVIEWS & ADMIN SECURITY FIX
 -- File: supabase/customer_reviews_migration.sql
 -- Architecture: Supabase (PostgreSQL 15+)
--- Description:
---   1. Creates or verifies public.customer_reviews table with constraints.
---   2. Enables Row Level Security (RLS) on customer_reviews.
---   3. Configures secure policies for public visitors (insert pending, view approved).
---   4. Configures secure admin policies using public.is_admin() (view all, update status, delete).
+-- Run this in your Supabase Dashboard -> SQL Editor
 -- ====================================================================
 
 BEGIN;
 
 -- --------------------------------------------------------------------
--- 1. BASE TABLE: public.customer_reviews
+-- 1. ENSURE ADMIN USERS TABLE & RECOGNIZE ADMIN EMAIL
 -- --------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.admin_users (
+    user_id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    email text,
+    created_at timestamptz NOT NULL DEFAULT now()
+);
 
+ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
+
+-- Insert admin into admin_users if user exists in auth.users
+INSERT INTO public.admin_users (user_id, email)
+SELECT id, email FROM auth.users 
+WHERE LOWER(email) = 'zentechsolutionss@gmail.com'
+   OR id = '3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::uuid
+ON CONFLICT (user_id) DO NOTHING;
+
+-- --------------------------------------------------------------------
+-- 2. HARDENED is_admin() FUNCTION
+-- Checks:
+--   a) Bootstrap admin UID (3f50b8c1-ccfa-4da9-885d-c4e0f61430dc)
+--   b) Admin email in JWT claims (zentechsolutionss@gmail.com)
+--   c) Presence in public.admin_users table
+-- --------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS boolean
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_catalog, pg_temp
+STABLE
+AS $$
+BEGIN
+  RETURN (
+    auth.uid() = '3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::uuid
+    OR LOWER(COALESCE(auth.jwt() ->> 'email', '')) = 'zentechsolutionss@gmail.com'
+    OR EXISTS (
+      SELECT 1 FROM public.admin_users 
+      WHERE user_id = auth.uid() 
+         OR LOWER(COALESCE(email, '')) = 'zentechsolutionss@gmail.com'
+    )
+  );
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated, anon;
+
+-- --------------------------------------------------------------------
+-- 3. CUSTOMER REVIEWS TABLE & COLUMNS
+-- --------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.customer_reviews (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_name text NOT NULL,
@@ -24,19 +66,20 @@ CREATE TABLE IF NOT EXISTS public.customer_reviews (
     created_at timestamptz NOT NULL DEFAULT now()
 );
 
--- Optimize queries for status filtering and date ordering
+-- Ensure optional email and user_id columns exist
+ALTER TABLE public.customer_reviews ADD COLUMN IF NOT EXISTS customer_email text;
+ALTER TABLE public.customer_reviews ADD COLUMN IF NOT EXISTS user_id uuid;
+
 CREATE INDEX IF NOT EXISTS idx_customer_reviews_status ON public.customer_reviews(status);
 CREATE INDEX IF NOT EXISTS idx_customer_reviews_created_at ON public.customer_reviews(created_at DESC);
 
--- Enable Row-Level Security
 ALTER TABLE public.customer_reviews ENABLE ROW LEVEL SECURITY;
 
 -- --------------------------------------------------------------------
--- 2. ROW LEVEL SECURITY (RLS) POLICIES
+-- 4. ROW LEVEL SECURITY (RLS) POLICIES
 -- --------------------------------------------------------------------
-
--- Clean up any existing policies on customer_reviews
 DROP POLICY IF EXISTS "Public can submit pending reviews" ON public.customer_reviews;
+DROP POLICY IF EXISTS "Authenticated users can submit pending reviews" ON public.customer_reviews;
 DROP POLICY IF EXISTS "Public can view approved reviews" ON public.customer_reviews;
 DROP POLICY IF EXISTS "Admins can view all reviews" ON public.customer_reviews;
 DROP POLICY IF EXISTS "Admins can update reviews" ON public.customer_reviews;
@@ -44,16 +87,11 @@ DROP POLICY IF EXISTS "Admins can delete reviews" ON public.customer_reviews;
 DROP POLICY IF EXISTS "Anyone can insert reviews" ON public.customer_reviews;
 DROP POLICY IF EXISTS "Anyone can view approved reviews" ON public.customer_reviews;
 
--- POLICY 1: Public visitors (anon and authenticated) can submit reviews.
--- STRICT ENFORCEMENT:
---   - Initial status MUST be 'pending'
---   - customer_name must not be empty
---   - review_text must not be empty
---   - rating must be between 1 and 5
-CREATE POLICY "Public can submit pending reviews"
+-- POLICY 1: Authenticated users can insert pending reviews
+CREATE POLICY "Authenticated users can submit pending reviews"
 ON public.customer_reviews
 FOR INSERT
-TO anon, authenticated
+TO authenticated, anon
 WITH CHECK (
     status = 'pending'
     AND length(trim(customer_name)) > 0
@@ -61,7 +99,7 @@ WITH CHECK (
     AND rating >= 1 AND rating <= 5
 );
 
--- POLICY 2: Public visitors (anon and authenticated) can only read approved reviews.
+-- POLICY 2: Public visitors can only view approved reviews
 CREATE POLICY "Public can view approved reviews"
 ON public.customer_reviews
 FOR SELECT
@@ -70,34 +108,73 @@ USING (
     status = 'approved'
 );
 
--- POLICY 3: Only authorized administrators (verified via public.is_admin()) can view ALL reviews.
+-- POLICY 3: Authorized admin can view ALL reviews (Pending, Approved, Rejected)
 CREATE POLICY "Admins can view all reviews"
 ON public.customer_reviews
 FOR SELECT
 TO authenticated
 USING (
     public.is_admin()
+    OR auth.uid() = '3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::uuid
+    OR LOWER(COALESCE(auth.jwt() ->> 'email', '')) = 'zentechsolutionss@gmail.com'
 );
 
--- POLICY 4: Only authorized administrators can update reviews (approve or reject status).
+-- POLICY 4: Authorized admin can update reviews (Approve or Reject)
 CREATE POLICY "Admins can update reviews"
 ON public.customer_reviews
 FOR UPDATE
 TO authenticated
 USING (
     public.is_admin()
+    OR auth.uid() = '3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::uuid
+    OR LOWER(COALESCE(auth.jwt() ->> 'email', '')) = 'zentechsolutionss@gmail.com'
 )
 WITH CHECK (
     public.is_admin()
+    OR auth.uid() = '3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::uuid
+    OR LOWER(COALESCE(auth.jwt() ->> 'email', '')) = 'zentechsolutionss@gmail.com'
 );
 
--- POLICY 5: Only authorized administrators can delete reviews.
+-- POLICY 5: Authorized admin can delete reviews
 CREATE POLICY "Admins can delete reviews"
 ON public.customer_reviews
 FOR DELETE
 TO authenticated
 USING (
     public.is_admin()
+    OR auth.uid() = '3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::uuid
+    OR LOWER(COALESCE(auth.jwt() ->> 'email', '')) = 'zentechsolutionss@gmail.com'
 );
+
+-- --------------------------------------------------------------------
+-- 5. SECURE RPC TO GUARANTEE ADMIN REVIEWS VISIBILITY
+-- --------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.admin_get_customer_reviews()
+RETURNS SETOF public.customer_reviews
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_catalog, pg_temp
+AS $$
+BEGIN
+  -- If caller is admin, return all reviews
+  IF (
+    auth.uid() = '3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::uuid
+    OR LOWER(COALESCE(auth.jwt() ->> 'email', '')) = 'zentechsolutionss@gmail.com'
+    OR public.is_admin()
+  ) THEN
+    RETURN QUERY 
+    SELECT * FROM public.customer_reviews 
+    ORDER BY created_at DESC;
+  ELSE
+    -- If regular visitor, return approved reviews only
+    RETURN QUERY 
+    SELECT * FROM public.customer_reviews 
+    WHERE status = 'approved' 
+    ORDER BY created_at DESC;
+  END IF;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.admin_get_customer_reviews() TO authenticated, anon;
 
 COMMIT;

@@ -144,6 +144,14 @@ function formatFileSize(bytes: number | null): string {
     setReviewsError(null);
 
     try {
+      // 1. Try secure RPC function first
+      const { data: rpcData, error: rpcError } = await supabase.rpc('admin_get_customer_reviews');
+      if (!rpcError && rpcData && Array.isArray(rpcData)) {
+        setReviews(rpcData as CustomerReview[]);
+        return;
+      }
+
+      // 2. Direct select
       const { data, error } = await supabase
         .from('customer_reviews')
         .select('*')
@@ -1648,13 +1656,29 @@ function formatFileSize(bytes: number | null): string {
                               {rev.customer_name ? rev.customer_name.charAt(0).toUpperCase() : 'U'}
                             </div>
                             <div>
-                              <div className="flex items-center gap-2">
-                                <h4 className="font-bold text-base text-black">{rev.customer_name}</h4>
-                                <span className="font-mono-tech text-[11px] text-neutral-400">
-                                  ({rev.rating}.0 / 5)
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-1 mt-0.5">
+                              {(() => {
+                                const emailMatch = rev.customer_name?.match(/\(([^)]+@[^)]+)\)/);
+                                const parsedEmail = (rev as any).customer_email || (emailMatch ? emailMatch[1] : null);
+                                const cleanName = emailMatch ? rev.customer_name.replace(emailMatch[0], '').trim() : rev.customer_name;
+
+                                return (
+                                  <>
+                                    <div className="flex flex-wrap items-center gap-2">
+                                      <h4 className="font-bold text-base text-black">{cleanName || 'Customer'}</h4>
+                                      <span className="font-mono-tech text-[11px] text-neutral-400">
+                                        ({rev.rating}.0 / 5)
+                                      </span>
+                                    </div>
+                                    {parsedEmail && (
+                                      <div className="flex items-center gap-1.5 mt-0.5 text-neutral-500 font-mono-tech text-[11px]">
+                                        <Mail className="w-3 h-3 text-[#476800] shrink-0" />
+                                        <span className="truncate">{parsedEmail}</span>
+                                      </div>
+                                    )}
+                                  </>
+                                );
+                              })()}
+                              <div className="flex items-center gap-1 mt-1">
                                 {[1, 2, 3, 4, 5].map((starNum) => (
                                   <Star
                                     key={starNum}
