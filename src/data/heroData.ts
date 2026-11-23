@@ -24,7 +24,7 @@ export const VALUE_PROPOSITIONS: ValueProposition[] = [
     num: '03',
     title: 'END-TO-END DEVELOPMENT',
     description:
-      'We build across both hardware and software — from electronics, embedded systems, IoT and PCB design to software, AI, web platforms and complete product development.',
+      'We build across both hardware and software — from electronics, embedded systems, and IoT to software, AI, web platforms and complete product development.',
     corner: 'bottom-left',
   },
   {

@@ -29,17 +29,6 @@ export const PricingPage: React.FC = () => {
       ]
     },
     {
-      title: 'PCB DESIGN',
-      price: 'Custom quotation',
-      description: 'Complete schematic capture, multi-layer board layout, DFM checks, and production Gerber files.',
-      deliverables: [
-        'Multi-layer schematic & PCB layout (Altium / KiCad)',
-        'Full Gerber, drill, and centroid fabrication files',
-        'Verified distributor BOM with stock checks',
-        'Design for Manufacturability (DFM) report'
-      ]
-    },
-    {
       title: 'EMBEDDED SYSTEM',
       price: 'Custom quotation',
       description: 'Custom firmware architecture, RTOS integration, peripheral drivers, and low-power optimization.',
@@ -67,7 +56,7 @@ export const PricingPage: React.FC = () => {
       highlighted: true,
       description: 'Full-stack turnkey product realization from initial concept to certified factory production.',
       deliverables: [
-        'Concept → Schematics → PCB → Firmware → CAD → Prototype',
+        'Concept → Schematics → Hardware → Firmware → CAD → Prototype',
         'Injection-mold ready 3D CAD tooling assemblies',
         'Regulatory pre-compliance testing (FCC, CE, RoHS)',
         'Automated factory test fixtures (FCT) and flashing scripts'

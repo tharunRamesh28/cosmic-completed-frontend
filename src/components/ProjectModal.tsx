@@ -37,7 +37,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   if (!isOpen) return null;
 
   const serviceOptions = [
-    { name: 'Hardware', icon: Cpu, desc: 'PCB Design & Microcontrollers' },
+    { name: 'Hardware', icon: Cpu, desc: 'Hardware Design & Microcontrollers' },
     { name: 'IoT', icon: Radio, desc: 'Wireless & Sensor Networks' },
     { name: 'Web', icon: Globe, desc: 'Telemetry & Cloud Dashboards' },
     { name: 'CAD', icon: Compass, desc: '3D Enclosures & Tooling DFM' },

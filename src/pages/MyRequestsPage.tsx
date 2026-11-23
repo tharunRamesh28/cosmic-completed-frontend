@@ -38,7 +38,7 @@ interface EditFormState {
 const PROJECT_TYPES = [
   'Embedded Systems & Firmware',
   'Industrial IoT & Edge Computing',
-  'Custom PCB Design & Prototyping',
+  'Custom Hardware Prototyping',
   'Sensors & Automation',
   'Hardware-Software Integration',
   'Other / Custom Engineering',

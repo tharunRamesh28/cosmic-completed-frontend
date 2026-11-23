@@ -223,7 +223,7 @@ export const AboutPage: React.FC = () => {
           "WE TURN IDEAS INTO WORKING TECHNOLOGY."
         </h2>
         <p className="font-display-tech text-lg sm:text-xl md:text-2xl text-[#444748] font-normal leading-relaxed">
-          Zen Tech Solutions is an electronics and product engineering studio focused on transforming ideas into real-world technology. We work across electronics, embedded systems, IoT, PCB development, CAD design, AI-powered hardware and complete product development.
+          Zen Tech Solutions is an electronics and product engineering studio focused on transforming ideas into real-world technology. We work across electronics, embedded systems, IoT, CAD design, AI-powered hardware and complete product development.
         </p>
       </div>
 

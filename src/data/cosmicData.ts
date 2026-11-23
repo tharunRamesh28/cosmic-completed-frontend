@@ -34,9 +34,9 @@ export const PHASE_STEPS: PhaseStep[] = [
     tag: '02 / DESIGN',
     title: 'Industrial & Circuit Design',
     subtitle: 'Precision Mechanical & Electronic Layouts',
-    description: 'Form-factor packaging, mechanical enclosures, PCB schematic capture, and impedance-matched routing with DFM constraints.',
+    description: 'Form-factor packaging, mechanical enclosures, schematic capture, and impedance-matched routing with DFM constraints.',
     iconName: 'PenTool',
-    deliverables: ['Multi-Layer PCB Gerber Files', '3D STEP CAD Assemblies', 'Thermal Dissipation Models', 'Component Clearance Audits'],
+    deliverables: ['Multi-Layer Hardware Gerber Files', '3D STEP CAD Assemblies', 'Thermal Dissipation Models', 'Component Clearance Audits'],
     timeline: '3 - 4 Weeks',
     tools: ['Altium Designer', 'Autodesk Fusion 360', 'ANSYS Thermal', 'Keysight RF Tools']
   },
@@ -83,7 +83,7 @@ export const CAPABILITIES: ServiceCapability[] = [
     id: 'hardware',
     title: 'Hardware',
     tag: 'PHYSICAL_NODE_01',
-    shortDesc: 'Custom PCB design, circuitry, and embedded systems engineered for reliability and scale.',
+    shortDesc: 'Custom circuitry, hardware architecture, and embedded systems engineered for reliability and scale.',
     fullDesc: 'We architect robust electronic hardware from ultra-low-power microcontrollers to high-speed digital and RF platforms. Every board is optimized for signal integrity, thermal efficiency, and high-yield automated manufacturing.',
     iconName: 'Cpu',
     features: [
@@ -199,7 +199,7 @@ export const FEATURED_PROJECTS: ProjectCaseStudy[] = [
     category: 'IoT',
     description: 'Modular high-throughput edge controller connecting legacy CNC machinery to modern web observability dashboards.',
     challenge: 'Handle multi-bus industrial protocols (RS485, CAN-FD, Ethernet/IP) simultaneously with microsecond timestamp synchronization.',
-    solution: 'Designed an isolated multi-bus PCB sandwich structure housed in an extruded anodized aluminum chassis with DIN-rail mount.',
+    solution: 'Designed an isolated multi-bus hardware sandwich structure housed in an extruded anodized aluminum chassis with DIN-rail mount.',
     results: [
       'Sub-50µs timestamp precision across 32 concurrent machines',
       'Hot-swappable I/O expansion modules',
@@ -221,13 +221,13 @@ export const FEATURED_PROJECTS: ProjectCaseStudy[] = [
     category: 'CAD',
     description: 'Ultra-miniaturized photoplethysmography (PPG) and motion sensor with medical-grade biocompatible silicone enclosure.',
     challenge: 'Fit a 120mAh LiPo, wireless Qi charging coil, Bluetooth 5.4 radio, and 6-axis IMU into an ultra-slim 28mm puck under 14 grams.',
-    solution: 'Developed a rigid-flex 6-layer PCB with embedded micro-vias, ultrasonic-welded polycarbonate core, and over-molded liquid silicone rubber (LSR).',
+    solution: 'Developed a rigid-flex 6-layer board architecture with embedded micro-vias, ultrasonic-welded polycarbonate core, and over-molded liquid silicone rubber (LSR).',
     results: [
       '11.8 grams total weight including battery',
       '7 days battery life on continuous 25Hz PPG sampling',
       'Passed 5 ATM water immersion tests'
     ],
-    techStack: ['Rigid-Flex PCB', 'Nordic nRF52840', 'Liquid Silicone Rubber', 'Qi Wireless Power', 'Web Bluetooth App'],
+    techStack: ['Rigid-Flex Hardware', 'Nordic nRF52840', 'Liquid Silicone Rubber', 'Qi Wireless Power', 'Web Bluetooth App'],
     image: HERO_PRODUCT_IMAGE,
     metrics: [
       { label: 'Mass', value: '11.8 g' },

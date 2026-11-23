@@ -65,7 +65,7 @@ describe('Phase 3, 6 & 7: Input Validation, Rate Limits & Payloads', () => {
     const validStep = { name: 'enclosure_rev2.step', size: 5 * 1024 * 1024 } as File;
     assert.strictEqual(validateFile(validStep).isValid, true);
 
-    const validGerber = { name: 'pcb_gerber.zip', size: 10 * 1024 * 1024 } as File;
+    const validGerber = { name: 'hardware_gerber.zip', size: 10 * 1024 * 1024 } as File;
     assert.strictEqual(validateFile(validGerber).isValid, true);
   });
 

@@ -57,3 +57,12 @@ export interface ProjectMessage {
   created_at: string;
   expires_at?: string;
 }
+
+export interface CustomerReview {
+  id: string;
+  customer_name: string;
+  rating: number;
+  review_text: string;
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
+}

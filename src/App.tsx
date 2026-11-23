@@ -16,6 +16,9 @@ import { ShaderBackground } from './components/ShaderBackground';
 import ClickSpark from './components/ClickSpark';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { useLenis } from './lib/useLenis';
+import { ReviewModalProvider } from './lib/ReviewModalContext';
+import { ReviewModal } from './components/ReviewModal';
+import { FloatingReviewButton } from './components/FloatingReviewButton';
 
 // Route-level code-splitting for performance
 const WorksPage = React.lazy(() => import('./pages/WorksPage').then(m => ({ default: m.WorksPage })));
@@ -259,6 +262,12 @@ function AppContent() {
         {/* Footer (Shared across all pages) */}
         <Footer />
 
+        {/* Floating Review Us Button (visible on all pages) */}
+        <FloatingReviewButton />
+
+        {/* Interactive Customer Review Modal */}
+        <ReviewModal />
+
         {/* Interactive Project Brief & Estimator Modal */}
         <ProjectModal
           isOpen={isProjectModalOpen}
@@ -280,7 +289,9 @@ export default function App() {
     <ErrorBoundary>
       <AuthProvider>
         <RouterProvider>
-          <AppContent />
+          <ReviewModalProvider>
+            <AppContent />
+          </ReviewModalProvider>
         </RouterProvider>
       </AuthProvider>
     </ErrorBoundary>

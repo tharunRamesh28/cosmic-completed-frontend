@@ -26,7 +26,7 @@ const SERVICES_DATA: ServiceCardData[] = [
     num: '01',
     tag: 'PHYSICAL_NODE_01',
     title: 'HARDWARE',
-    description: 'Custom PCB design, circuitry, and embedded systems engineered for reliability and scale.',
+    description: 'Custom circuitry, hardware architecture, and embedded systems engineered for reliability and scale.',
     icon: Cpu,
     capabilities: [
       'Multi-layer HDI & RF Circuit Layouts',

@@ -22,9 +22,14 @@ import {
   LayoutDashboard,
   FolderKanban,
   Settings as SettingsIcon,
-  Menu
+  Menu,
+  Star,
+  Trash2,
+  ThumbsUp,
+  ThumbsDown,
+  MessageSquare
 } from 'lucide-react';
-import { supabase, ProjectSubmission, ProjectFile } from '../lib/supabase';
+import { supabase, ProjectSubmission, ProjectFile, CustomerReview } from '../lib/supabase';
 import { useAdminAuth } from '../lib/useAdminAuth';
 import { Link, useRouter } from '../router';
 
@@ -62,13 +67,24 @@ function formatFileSize(bytes: number | null): string {
   const { loading: authLoading, isAdmin, adminUser, signOut } = useAdminAuth(true);
 
   // Active navigation tab
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'projects' | 'messages' | 'settings'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'projects' | 'reviews' | 'messages' | 'settings'>('dashboard');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState<boolean>(false);
 
   // Submissions State
   const [submissions, setSubmissions] = useState<ProjectSubmission[]>([]);
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
+
+  // Customer Reviews State
+  const [reviews, setReviews] = useState<CustomerReview[]>([]);
+  const [loadingReviews, setLoadingReviews] = useState<boolean>(true);
+  const [reviewsError, setReviewsError] = useState<string | null>(null);
+  const [reviewFilterStatus, setReviewFilterStatus] = useState<'ALL' | 'pending' | 'approved' | 'rejected'>('ALL');
+  const [reviewSearchQuery, setReviewSearchQuery] = useState<string>('');
+  const [reviewActionLoading, setReviewActionLoading] = useState<string | null>(null);
+  const [reviewActionMsg, setReviewActionMsg] = useState<string | null>(null);
+  const [reviewActionError, setReviewActionError] = useState<string | null>(null);
+  const [reviewToDelete, setReviewToDelete] = useState<CustomerReview | null>(null);
 
   // Search & Filters
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -120,6 +136,151 @@ function formatFileSize(bytes: number | null): string {
       fetchSubmissions();
     }
   }, [isAdmin, fetchSubmissions]);
+
+  // Fetch Customer Reviews from Supabase
+  const fetchReviews = useCallback(async () => {
+    if (!isAdmin) return;
+    setLoadingReviews(true);
+    setReviewsError(null);
+
+    try {
+      const { data, error } = await supabase
+        .from('customer_reviews')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        setReviewsError(`Unable to sync customer reviews: ${error.message}`);
+      } else {
+        setReviews((data as CustomerReview[]) || []);
+      }
+    } catch {
+      setReviewsError('Unexpected connection issue while syncing customer reviews.');
+    } finally {
+      setLoadingReviews(false);
+    }
+  }, [isAdmin]);
+
+  useEffect(() => {
+    if (isAdmin) {
+      fetchReviews();
+    }
+  }, [isAdmin, fetchReviews]);
+
+  // Customer Reviews Statistics
+  const reviewStats = useMemo(() => {
+    const total = reviews.length;
+    const pending = reviews.filter((r) => r.status === 'pending').length;
+    const approved = reviews.filter((r) => r.status === 'approved').length;
+    const rejected = reviews.filter((r) => r.status === 'rejected').length;
+    return {
+      total,
+      pending,
+      approved,
+      rejected,
+    };
+  }, [reviews]);
+
+  // Review Actions
+  const handleApproveReview = async (reviewId: string) => {
+    setReviewActionLoading(reviewId);
+    setReviewActionMsg(null);
+    setReviewActionError(null);
+    try {
+      const { error } = await supabase
+        .from('customer_reviews')
+        .update({ status: 'approved' })
+        .eq('id', reviewId);
+
+      if (error) {
+        setReviewActionError(`Failed to approve review: ${error.message}`);
+      } else {
+        setReviews((prev) =>
+          prev.map((r) => (r.id === reviewId ? { ...r, status: 'approved' } : r))
+        );
+        setReviewActionMsg('Review approved and published successfully.');
+      }
+    } catch (err: any) {
+      setReviewActionError(`Error updating review status: ${err?.message || 'Connection error'}`);
+    } finally {
+      setReviewActionLoading(null);
+    }
+  };
+
+  const handleRejectReview = async (reviewId: string) => {
+    setReviewActionLoading(reviewId);
+    setReviewActionMsg(null);
+    setReviewActionError(null);
+    try {
+      const { error } = await supabase
+        .from('customer_reviews')
+        .update({ status: 'rejected' })
+        .eq('id', reviewId);
+
+      if (error) {
+        setReviewActionError(`Failed to reject review: ${error.message}`);
+      } else {
+        setReviews((prev) =>
+          prev.map((r) => (r.id === reviewId ? { ...r, status: 'rejected' } : r))
+        );
+        setReviewActionMsg('Review marked as rejected.');
+      }
+    } catch (err: any) {
+      setReviewActionError(`Error updating review status: ${err?.message || 'Connection error'}`);
+    } finally {
+      setReviewActionLoading(null);
+    }
+  };
+
+  const handleDeleteReview = async () => {
+    if (!reviewToDelete) return;
+    const targetId = reviewToDelete.id;
+    setReviewActionLoading(targetId);
+    setReviewActionMsg(null);
+    setReviewActionError(null);
+
+    try {
+      // Delete ONLY the selected review from the database using its unique review ID
+      const { error } = await supabase
+        .from('customer_reviews')
+        .delete()
+        .eq('id', targetId);
+
+      if (error) {
+        // Keep the review visible and display an appropriate error message
+        setReviewActionError(`Failed to delete review: ${error.message}`);
+      } else {
+        // Immediately remove that review from the admin dashboard without refreshing the entire page
+        setReviews((prev) => prev.filter((r) => r.id !== targetId));
+        setReviewActionMsg('Review was permanently deleted successfully.');
+      }
+    } catch (err: any) {
+      setReviewActionError(
+        `Unexpected error while deleting review: ${err?.message || 'Please check your connection'}`
+      );
+    } finally {
+      setReviewToDelete(null);
+      setReviewActionLoading(null);
+    }
+  };
+
+  // Filtered Customer Reviews
+  const filteredReviews = useMemo(() => {
+    return reviews.filter((item) => {
+      if (reviewFilterStatus !== 'ALL' && item.status !== reviewFilterStatus) {
+        return false;
+      }
+      if (reviewSearchQuery.trim() !== '') {
+        const query = reviewSearchQuery.toLowerCase();
+        const matchesName = item.customer_name?.toLowerCase().includes(query);
+        const matchesText = item.review_text?.toLowerCase().includes(query);
+        if (!matchesName && !matchesText) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [reviews, reviewFilterStatus, reviewSearchQuery]);
 
   // Statistics Calculation
   const stats = useMemo(() => {
@@ -396,6 +557,32 @@ function formatFileSize(bytes: number | null): string {
 
             <button
               onClick={() => {
+                setActiveTab('reviews');
+                closeProjectDetails();
+              }}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg font-bold transition-all text-left cursor-pointer ${
+                activeTab === 'reviews'
+                  ? 'bg-black text-white shadow-xs'
+                  : 'text-neutral-600 hover:text-black hover:bg-[#f3f4f1]'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Star className="w-4 h-4 text-[#c8f179]" />
+                <span>Customer Reviews</span>
+              </div>
+              {reviewStats.pending > 0 ? (
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold border border-amber-300">
+                  {reviewStats.pending}
+                </span>
+              ) : (
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#f3f4f1] text-neutral-600 font-bold">
+                  {reviews.length}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => {
                 setActiveTab('messages');
                 closeProjectDetails();
               }}
@@ -527,6 +714,30 @@ function formatFileSize(bytes: number | null): string {
                 </button>
                 <button
                   onClick={() => {
+                    setActiveTab('reviews');
+                    setIsMobileSidebarOpen(false);
+                    closeProjectDetails();
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg font-bold text-left ${
+                    activeTab === 'reviews' ? 'bg-black text-white' : 'text-neutral-600'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Star className="w-4 h-4 text-[#c8f179]" />
+                    <span>Customer Reviews</span>
+                  </div>
+                  {reviewStats.pending > 0 ? (
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold">
+                      {reviewStats.pending}
+                    </span>
+                  ) : (
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#daf396] text-[#365000] font-bold">
+                      {reviews.length}
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={() => {
                     setActiveTab('messages');
                     setIsMobileSidebarOpen(false);
                     closeProjectDetails();
@@ -608,12 +819,15 @@ function formatFileSize(bytes: number | null): string {
               </Link>
 
               <button
-                onClick={fetchSubmissions}
-                disabled={loadingData}
-                title="Sync submissions"
+                onClick={() => {
+                  fetchSubmissions();
+                  fetchReviews();
+                }}
+                disabled={loadingData || loadingReviews}
+                title="Sync submissions and reviews"
                 className="p-2 rounded-lg border border-[#c4c7c7] text-neutral-600 hover:text-black hover:border-black transition-colors cursor-pointer disabled:opacity-50"
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${loadingData ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-3.5 h-3.5 ${loadingData || loadingReviews ? 'animate-spin' : ''}`} />
               </button>
 
               <div className="hidden sm:flex items-center gap-2 pl-2 border-l border-[#c4c7c7]/40">
@@ -665,6 +879,8 @@ function formatFileSize(bytes: number | null): string {
 
           {/* =====================================================================
               VIEW 1: DASHBOARD OVERVIEW (STATISTICS & RECENT ACTIVITY)
+          {/* =====================================================================
+              VIEW 4: SETTINGS (PLACEHOLDER)
              ===================================================================== */}
           {activeTab === 'dashboard' && (
             <div className="space-y-8">
@@ -681,13 +897,22 @@ function formatFileSize(bytes: number | null): string {
                     Real-time operational telemetry and client project submissions for Zen Tech Solutions.
                   </p>
                 </div>
-                <button
-                  onClick={() => setActiveTab('projects')}
-                  className="self-start sm:self-auto inline-flex items-center gap-2 bg-black text-white hover:bg-neutral-800 font-mono-tech text-xs font-bold py-2.5 px-4 rounded-lg transition-colors cursor-pointer shadow-xs"
-                >
-                  <span>VIEW ALL PROJECTS</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
+                <div className="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
+                  <button
+                    onClick={() => setActiveTab('reviews')}
+                    className="inline-flex items-center gap-2 bg-[#f4fbe9] border border-[#c8f179] hover:bg-[#daf396] text-[#2e4700] font-mono-tech text-xs font-bold py-2.5 px-3.5 rounded-lg transition-colors cursor-pointer shadow-xs"
+                  >
+                    <Star className="w-3.5 h-3.5 fill-[#476800] text-[#476800]" />
+                    <span>REVIEWS ({reviewStats.pending} PENDING)</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('projects')}
+                    className="inline-flex items-center gap-2 bg-black text-white hover:bg-neutral-800 font-mono-tech text-xs font-bold py-2.5 px-4 rounded-lg transition-colors cursor-pointer shadow-xs"
+                  >
+                    <span>VIEW ALL PROJECTS</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
 
               {/* 4 Premium Statistic Cards */}
@@ -836,6 +1061,8 @@ function formatFileSize(bytes: number | null): string {
 
           {/* =====================================================================
               VIEW 2: PROJECT MANAGEMENT (FULL TABLE & FILTERING)
+          {/* =====================================================================
+              VIEW 4: SETTINGS (PLACEHOLDER)
              ===================================================================== */}
           {activeTab === 'projects' && (
             <div className="space-y-6">
@@ -1093,6 +1320,455 @@ function formatFileSize(bytes: number | null): string {
 
           
 
+          {/* =====================================================================
+              VIEW 3: CUSTOMER REVIEWS (FEEDBACK MODERATION & MANAGEMENT)
+          {/* =====================================================================
+              VIEW 4: SETTINGS (PLACEHOLDER)
+             ===================================================================== */}
+          {activeTab === 'reviews' && (
+            <div className="space-y-6">
+              {/* Header Title with review counter */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#c4c7c7]/50 pb-5">
+                <div>
+                  <div className="font-mono-tech text-[11px] font-bold text-[#476800] uppercase tracking-wider">
+                    FEEDBACK & TESTIMONIALS
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-black text-black tracking-tight mt-0.5">
+                    CUSTOMER REVIEWS
+                  </h2>
+                  <p className="text-xs text-neutral-500 mt-1">
+                    Moderate client reviews and manage testimonials published to the live ZenTech website.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 self-start sm:self-auto font-mono-tech text-xs">
+                  <button
+                    onClick={fetchReviews}
+                    disabled={loadingReviews}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#c4c7c7] hover:border-black rounded-lg text-neutral-700 hover:text-black shadow-2xs transition-colors cursor-pointer"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${loadingReviews ? 'animate-spin' : ''}`} />
+                    <span>SYNC REVIEWS</span>
+                  </button>
+                  <span className="px-3 py-1.5 bg-white border border-[#c4c7c7] rounded-lg text-neutral-700 shadow-2xs">
+                    <strong className="text-black font-bold">{filteredReviews.length}</strong> review
+                    {filteredReviews.length === 1 ? '' : 's'} displayed
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Feedback Message */}
+              {reviewActionMsg && (
+                <div className="p-3.5 rounded-xl bg-[#f4fbe9] border border-[#c8f179] text-[#2b4000] font-mono-tech text-xs flex items-center justify-between animate-in fade-in">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 shrink-0 text-[#476800]" />
+                    <span>{reviewActionMsg}</span>
+                  </div>
+                  <button
+                    onClick={() => setReviewActionMsg(null)}
+                    className="text-neutral-500 hover:text-black cursor-pointer font-bold ml-2"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* Action Error Feedback Message */}
+              {reviewActionError && (
+                <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 font-mono-tech text-xs flex items-center justify-between animate-in fade-in">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                    <span>{reviewActionError}</span>
+                  </div>
+                  <button
+                    onClick={() => setReviewActionError(null)}
+                    className="text-neutral-500 hover:text-black cursor-pointer font-bold ml-2"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {reviewsError && (
+                <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-mono-tech flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                    <span>{reviewsError}</span>
+                  </div>
+                  <button
+                    onClick={fetchReviews}
+                    className="underline font-bold hover:text-red-900 cursor-pointer"
+                  >
+                    Retry Sync
+                  </button>
+                </div>
+              )}
+
+              {/* 4 Summary Stat Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                {/* 1. TOTAL REVIEWS */}
+                <div
+                  onClick={() => setReviewFilterStatus('ALL')}
+                  className={`bg-white border rounded-xl p-5 shadow-xs relative overflow-hidden group cursor-pointer transition-all ${
+                    reviewFilterStatus === 'ALL'
+                      ? 'border-black ring-2 ring-black/10'
+                      : 'border-[#c4c7c7] hover:border-black'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-mono-tech text-[11px] font-bold text-neutral-500 uppercase tracking-wider">
+                      TOTAL REVIEWS
+                    </span>
+                    <MessageSquare className="w-4 h-4 text-neutral-400" />
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-black text-black tracking-tight">
+                    {reviewStats.total}
+                  </div>
+                  <div className="font-mono-tech text-[11px] text-neutral-400 mt-1 flex items-center gap-1">
+                    <span className="text-[#476800] font-bold">●</span>
+                    <span>all submissions</span>
+                  </div>
+                </div>
+
+                {/* 2. PENDING REVIEWS */}
+                <div
+                  onClick={() => setReviewFilterStatus('pending')}
+                  className={`bg-white border rounded-xl p-5 shadow-xs relative overflow-hidden group cursor-pointer transition-all ${
+                    reviewFilterStatus === 'pending'
+                      ? 'border-amber-400 ring-2 ring-amber-300/40 bg-amber-50/20'
+                      : 'border-[#c4c7c7] hover:border-amber-400'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-mono-tech text-[11px] font-bold text-amber-800 uppercase tracking-wider">
+                      PENDING REVIEWS
+                    </span>
+                    <span className="font-mono-tech text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 font-bold border border-amber-300">
+                      ACTION
+                    </span>
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-black text-amber-900 tracking-tight">
+                    {reviewStats.pending}
+                  </div>
+                  <div className="font-mono-tech text-[11px] text-amber-700/80 mt-1">
+                    awaiting admin approval
+                  </div>
+                </div>
+
+                {/* 3. APPROVED REVIEWS */}
+                <div
+                  onClick={() => setReviewFilterStatus('approved')}
+                  className={`bg-white border rounded-xl p-5 shadow-xs relative overflow-hidden group cursor-pointer transition-all ${
+                    reviewFilterStatus === 'approved'
+                      ? 'border-[#c8f179] ring-2 ring-[#c8f179]/50 bg-[#f4fbe9]/30'
+                      : 'border-[#c4c7c7] hover:border-[#c8f179]'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-mono-tech text-[11px] font-bold text-[#476800] uppercase tracking-wider">
+                      APPROVED REVIEWS
+                    </span>
+                    <CheckCircle2 className="w-4 h-4 text-[#476800]" />
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-black text-black tracking-tight">
+                    {reviewStats.approved}
+                  </div>
+                  <div className="font-mono-tech text-[11px] text-neutral-400 mt-1">
+                    published on live website
+                  </div>
+                </div>
+
+                {/* 4. REJECTED REVIEWS */}
+                <div
+                  onClick={() => setReviewFilterStatus('rejected')}
+                  className={`bg-white border rounded-xl p-5 shadow-xs relative overflow-hidden group cursor-pointer transition-all ${
+                    reviewFilterStatus === 'rejected'
+                      ? 'border-rose-400 ring-2 ring-rose-200 bg-rose-50/20'
+                      : 'border-[#c4c7c7] hover:border-rose-400'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-mono-tech text-[11px] font-bold text-rose-700 uppercase tracking-wider">
+                      REJECTED REVIEWS
+                    </span>
+                    <ThumbsDown className="w-4 h-4 text-rose-500" />
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-black text-neutral-800 tracking-tight">
+                    {reviewStats.rejected}
+                  </div>
+                  <div className="font-mono-tech text-[11px] text-neutral-400 mt-1">
+                    declined & hidden from site
+                  </div>
+                </div>
+              </div>
+
+              {/* Filtering & Search Toolbar */}
+              <div className="bg-white border border-[#c4c7c7] rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-2xs">
+                {/* Search reviews... */}
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={reviewSearchQuery}
+                    onChange={(e) => setReviewSearchQuery(e.target.value)}
+                    placeholder="Search reviews by customer name or written feedback..."
+                    className="w-full bg-[#f9faf7] border border-[#c4c7c7] rounded-lg pl-10 pr-4 py-2 text-xs text-black placeholder-neutral-400 focus:outline-none focus:border-black transition-colors"
+                  />
+                  {reviewSearchQuery && (
+                    <button
+                      onClick={() => setReviewSearchQuery('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-black text-xs cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Filter Tabs */}
+                <div className="flex flex-wrap items-center gap-1.5 text-xs font-mono-tech">
+                  <button
+                    onClick={() => setReviewFilterStatus('ALL')}
+                    className={`px-3 py-1.5 rounded-lg font-bold transition-colors cursor-pointer text-xs ${
+                      reviewFilterStatus === 'ALL'
+                        ? 'bg-black text-white'
+                        : 'bg-[#f9faf7] border border-[#c4c7c7] text-neutral-600 hover:text-black'
+                    }`}
+                  >
+                    All Reviews ({reviewStats.total})
+                  </button>
+
+                  <button
+                    onClick={() => setReviewFilterStatus('pending')}
+                    className={`px-3 py-1.5 rounded-lg font-bold transition-colors cursor-pointer text-xs flex items-center gap-1.5 ${
+                      reviewFilterStatus === 'pending'
+                        ? 'bg-amber-500 text-white shadow-xs'
+                        : 'bg-[#f9faf7] border border-[#c4c7c7] text-amber-800 hover:border-amber-400'
+                    }`}
+                  >
+                    <span>Pending</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20">
+                      {reviewStats.pending}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => setReviewFilterStatus('approved')}
+                    className={`px-3 py-1.5 rounded-lg font-bold transition-colors cursor-pointer text-xs flex items-center gap-1.5 ${
+                      reviewFilterStatus === 'approved'
+                        ? 'bg-[#476800] text-white shadow-xs'
+                        : 'bg-[#f9faf7] border border-[#c4c7c7] text-[#476800] hover:border-[#c8f179]'
+                    }`}
+                  >
+                    <span>Approved</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20">
+                      {reviewStats.approved}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => setReviewFilterStatus('rejected')}
+                    className={`px-3 py-1.5 rounded-lg font-bold transition-colors cursor-pointer text-xs flex items-center gap-1.5 ${
+                      reviewFilterStatus === 'rejected'
+                        ? 'bg-rose-600 text-white shadow-xs'
+                        : 'bg-[#f9faf7] border border-[#c4c7c7] text-rose-700 hover:border-rose-400'
+                    }`}
+                  >
+                    <span>Rejected</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20">
+                      {reviewStats.rejected}
+                    </span>
+                  </button>
+
+                  {(reviewFilterStatus !== 'ALL' || reviewSearchQuery) && (
+                    <button
+                      onClick={() => {
+                        setReviewFilterStatus('ALL');
+                        setReviewSearchQuery('');
+                      }}
+                      className="font-mono-tech text-[10px] text-neutral-600 hover:text-black uppercase underline ml-1 cursor-pointer"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Reviews List */}
+              <div className="space-y-4">
+                {loadingReviews ? (
+                  <div className="bg-white border border-[#c4c7c7] rounded-xl p-16 text-center">
+                    <div className="w-6 h-6 border-2 border-black/20 border-t-black rounded-full animate-spin mx-auto mb-3" />
+                    <span className="font-mono-tech text-xs text-neutral-500 uppercase">
+                      SYNCING REVIEWS FROM SUPABASE...
+                    </span>
+                  </div>
+                ) : filteredReviews.length === 0 ? (
+                  <div className="bg-white border border-[#c4c7c7] rounded-xl p-16 text-center space-y-3">
+                    <div className="w-12 h-12 rounded-xl bg-[#f9faf7] border border-[#c4c7c7] text-neutral-400 mx-auto flex items-center justify-center">
+                      <Star className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-bold text-base text-black">NO REVIEWS FOUND</h3>
+                    <p className="font-mono-tech text-xs text-neutral-500 max-w-sm mx-auto">
+                      {reviewSearchQuery || reviewFilterStatus !== 'ALL'
+                        ? 'No customer reviews match your active filter or search query.'
+                        : 'No customer reviews have been submitted yet.'}
+                    </p>
+                    {(reviewFilterStatus !== 'ALL' || reviewSearchQuery) && (
+                      <button
+                        onClick={() => {
+                          setReviewFilterStatus('ALL');
+                          setReviewSearchQuery('');
+                        }}
+                        className="font-mono-tech text-xs font-bold text-[#476800] hover:underline cursor-pointer"
+                      >
+                        Clear Filters
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  filteredReviews.map((rev) => {
+                    const formattedDate = new Date(rev.created_at).toLocaleString('en-GB', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    });
+
+                    return (
+                      <div
+                        key={rev.id}
+                        className="bg-white border border-[#c4c7c7] rounded-xl p-5 sm:p-6 shadow-xs hover:border-black/60 transition-all space-y-4"
+                      >
+                        {/* Header: Customer, Stars, Status Badge, Date */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#c4c7c7]/30 pb-3.5">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-black text-[#c8f179] font-mono-tech font-bold text-sm flex items-center justify-center shrink-0">
+                              {rev.customer_name ? rev.customer_name.charAt(0).toUpperCase() : 'U'}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-bold text-base text-black">{rev.customer_name}</h4>
+                                <span className="font-mono-tech text-[11px] text-neutral-400">
+                                  ({rev.rating}.0 / 5)
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-1 mt-0.5">
+                                {[1, 2, 3, 4, 5].map((starNum) => (
+                                  <Star
+                                    key={starNum}
+                                    className={`w-3.5 h-3.5 ${
+                                      starNum <= rev.rating
+                                        ? 'text-amber-400 fill-amber-400'
+                                        : 'text-neutral-200'
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            {/* Status Badge */}
+                            {rev.status === 'pending' && (
+                              <span className="font-mono-tech text-[10px] font-bold uppercase px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-300 flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                <span>PENDING APPROVAL</span>
+                              </span>
+                            )}
+                            {rev.status === 'approved' && (
+                              <span className="font-mono-tech text-[10px] font-bold uppercase px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-300 flex items-center gap-1.5">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                                <span>APPROVED & LIVE</span>
+                              </span>
+                            )}
+                            {rev.status === 'rejected' && (
+                              <span className="font-mono-tech text-[10px] font-bold uppercase px-2.5 py-1 rounded-md bg-rose-50 text-rose-700 border border-rose-300 flex items-center gap-1.5">
+                                <X className="w-3.5 h-3.5 text-rose-600" />
+                                <span>REJECTED</span>
+                              </span>
+                            )}
+
+                            <span className="font-mono-tech text-[10px] text-neutral-400">
+                              {formattedDate}
+                            </span>
+
+                            {/* Small Red Trash Icon Button beside review header */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setReviewToDelete(rev);
+                              }}
+                              disabled={reviewActionLoading === rev.id}
+                              className="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white border border-rose-200 hover:border-rose-600 transition-all cursor-pointer shadow-2xs shrink-0 disabled:opacity-50"
+                              title="Delete this review"
+                              aria-label={`Delete review from ${rev.customer_name}`}
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Review Content */}
+                        <div className="bg-[#f9faf7] border border-[#c4c7c7]/50 rounded-lg p-4">
+                          <p className="text-neutral-800 text-sm leading-relaxed italic font-sans">
+                            "{rev.review_text}"
+                          </p>
+                        </div>
+
+                        {/* Action Buttons Toolbar */}
+                        <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                          <div className="flex items-center gap-2">
+                            {rev.status !== 'approved' && (
+                              <button
+                                onClick={() => handleApproveReview(rev.id)}
+                                disabled={reviewActionLoading === rev.id}
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-black text-[#c8f179] hover:bg-neutral-800 font-mono-tech text-xs font-bold transition-all cursor-pointer shadow-2xs disabled:opacity-50"
+                              >
+                                {reviewActionLoading === rev.id ? (
+                                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                                ) : (
+                                  <ThumbsUp className="w-3.5 h-3.5" />
+                                )}
+                                <span>APPROVE REVIEW</span>
+                              </button>
+                            )}
+
+                            {rev.status !== 'rejected' && (
+                              <button
+                                onClick={() => handleRejectReview(rev.id)}
+                                disabled={reviewActionLoading === rev.id}
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white border border-[#c4c7c7] text-neutral-700 hover:text-rose-600 hover:border-rose-400 font-mono-tech text-xs font-bold transition-all cursor-pointer shadow-2xs disabled:opacity-50"
+                              >
+                                {reviewActionLoading === rev.id ? (
+                                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                                ) : (
+                                  <ThumbsDown className="w-3.5 h-3.5" />
+                                )}
+                                <span>REJECT</span>
+                              </button>
+                            )}
+                          </div>
+
+                          {/* Delete Review Button - Small red trash icon button */}
+                          <button
+                            onClick={() => setReviewToDelete(rev)}
+                            disabled={reviewActionLoading === rev.id}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white border border-rose-200 hover:border-rose-600 font-mono-tech text-xs font-bold transition-all cursor-pointer shadow-2xs disabled:opacity-50 shrink-0"
+                            title="Delete this review"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            <span>Delete Review</span>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          )}
           {/* =====================================================================
               VIEW 4: SETTINGS (PLACEHOLDER)
              ===================================================================== */}
@@ -1401,6 +2077,60 @@ function formatFileSize(bytes: number | null): string {
             <div className="flex justify-end gap-3 pt-2">
               <button onClick={() => setProjectToDelete(null)} disabled={actionLoading} className="px-4 py-2 text-neutral-600 font-bold text-xs cursor-pointer hover:bg-neutral-100 rounded-lg transition-colors">CANCEL</button>
               <button onClick={handleDeleteProject} disabled={actionLoading} className="px-4 py-2 bg-rose-600 text-white rounded-lg font-bold text-xs cursor-pointer hover:bg-rose-700 transition-colors">{actionLoading ? 'DELETING...' : 'DELETE PROJECT'}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {reviewToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full space-y-4 shadow-2xl border border-[#c4c7c7]">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center shrink-0">
+                <Trash2 className="w-4 h-4" />
+              </div>
+              <h3 className="font-bold text-lg text-black">Delete Review</h3>
+            </div>
+
+            <p className="text-sm text-neutral-600 leading-relaxed">
+              Are you sure you want to permanently delete this review? This action cannot be undone.
+            </p>
+
+            <div className="bg-[#f9faf7] border border-[#c4c7c7]/60 rounded-lg p-3 text-xs space-y-1">
+              <div className="flex items-center justify-between font-bold text-black">
+                <span>{reviewToDelete.customer_name}</span>
+                <span className="font-mono-tech text-amber-600">★ {reviewToDelete.rating}.0 / 5</span>
+              </div>
+              <p className="text-neutral-500 line-clamp-2 italic font-sans text-[11px]">
+                "{reviewToDelete.review_text}"
+              </p>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-2 font-mono-tech text-xs">
+              <button
+                onClick={() => setReviewToDelete(null)}
+                disabled={reviewActionLoading !== null}
+                className="px-4 py-2 border border-[#c4c7c7] text-neutral-700 font-bold cursor-pointer hover:bg-neutral-100 rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteReview}
+                disabled={reviewActionLoading !== null}
+                className="px-4 py-2 bg-rose-600 text-white rounded-lg font-bold cursor-pointer hover:bg-rose-700 transition-colors flex items-center gap-1.5 shadow-xs disabled:opacity-50"
+              >
+                {reviewActionLoading === reviewToDelete.id ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Delete</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>
