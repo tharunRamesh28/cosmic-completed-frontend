@@ -11,19 +11,27 @@ BEGIN;
 -- 1. ENSURE ADMIN USERS TABLE & RECOGNIZE ADMIN EMAIL
 -- --------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.admin_users (
-    user_id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    user_id uuid PRIMARY KEY,
     email text,
     created_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- Ensure columns exist even if table was created earlier with fewer columns
+ALTER TABLE public.admin_users ADD COLUMN IF NOT EXISTS email text;
+ALTER TABLE public.admin_users ADD COLUMN IF NOT EXISTS created_at timestamptz DEFAULT now();
+
 ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
 
--- Insert admin into admin_users if user exists in auth.users
+-- Insert/Upsert admin into admin_users table
+INSERT INTO public.admin_users (user_id, email)
+VALUES ('3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::uuid, 'zentechsolutionss@gmail.com')
+ON CONFLICT (user_id) DO UPDATE SET email = EXCLUDED.email;
+
+-- Also link user by email if they signed up in auth.users
 INSERT INTO public.admin_users (user_id, email)
 SELECT id, email FROM auth.users 
-WHERE LOWER(email) = 'zentechsolutionss@gmail.com'
-   OR id = '3f50b8c1-ccfa-4da9-885d-c4e0f61430dc'::uuid
-ON CONFLICT (user_id) DO NOTHING;
+WHERE LOWER(COALESCE(email, '')) = 'zentechsolutionss@gmail.com'
+ON CONFLICT (user_id) DO UPDATE SET email = EXCLUDED.email;
 
 -- --------------------------------------------------------------------
 -- 2. HARDENED is_admin() FUNCTION
