@@ -39,10 +39,13 @@ export function validateEmail(email: string): ValidationResult {
 }
 
 /**
- * Validates optional phone number
+ * Validates phone number (optional by default, can be required)
  */
-export function validatePhone(phone: string | null | undefined): ValidationResult {
+export function validatePhone(phone: string | null | undefined, isRequired = false): ValidationResult {
   if (!phone || !phone.trim()) {
+    if (isRequired) {
+      return { isValid: false, error: 'Phone number is required.' };
+    }
     return { isValid: true }; // optional
   }
   const cleanPhone = phone.trim();

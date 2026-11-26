@@ -22,7 +22,6 @@ export const OrderPage: React.FC = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
-  const [company, setCompany] = useState<string>('');
   const [projectName, setProjectName] = useState<string>('');
   const [projectType, setProjectType] = useState<string>('Embedded Systems');
   const [projectDescription, setProjectDescription] = useState<string>('');
@@ -107,7 +106,11 @@ export const OrderPage: React.FC = () => {
       setFormError(emailCheck.error || 'Please enter a valid email address.');
       return;
     }
-    const phoneCheck = validatePhone(phone);
+    if (!phone.trim()) {
+      setFormError('Please provide your phone number.');
+      return;
+    }
+    const phoneCheck = validatePhone(phone, true);
     if (!phoneCheck.isValid) {
       setFormError(phoneCheck.error || 'Please enter a valid phone number.');
       return;
@@ -147,8 +150,7 @@ export const OrderPage: React.FC = () => {
       // Input sanitization & bounds enforcement
       const sanitizedName = sanitizeText(name, 100);
       const sanitizedEmail = email.trim().toLowerCase().slice(0, 120);
-      const sanitizedPhone = phone.trim() ? sanitizeText(phone, 30) : null;
-      const sanitizedCompany = company.trim() ? sanitizeText(company, 100) : null;
+      const sanitizedPhone = sanitizeText(phone, 30);
       const sanitizedProjectName = sanitizeText(projectName, 120);
       const sanitizedDescription = sanitizeText(projectDescription, 5000);
 
@@ -161,7 +163,7 @@ export const OrderPage: React.FC = () => {
         client_name: sanitizedName,
         email: sanitizedEmail,
         phone: sanitizedPhone,
-        company: sanitizedCompany,
+        company: null,
         project_name: sanitizedProjectName,
         project_type: projectType,
         project_description: sanitizedDescription,
@@ -368,28 +370,16 @@ export const OrderPage: React.FC = () => {
                   />
                 </div>
 
-                <div>
+                <div className="md:col-span-2">
                   <label className="font-mono-tech text-xs text-neutral-500 uppercase font-bold block mb-2">
-                    Phone Number
+                    Phone Number *
                   </label>
                   <input
                     type="tel"
+                    required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+1 (555) 019-2834"
-                    className="w-full bg-[#f9faf7] border border-[#c4c7c7] rounded-lg p-3.5 text-sm font-display-tech text-black focus:outline-none focus:border-black transition-colors"
-                  />
-                </div>
-
-                <div>
-                  <label className="font-mono-tech text-xs text-neutral-500 uppercase font-bold block mb-2">
-                    Company / Organization
-                  </label>
-                  <input
-                    type="text"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    placeholder="Tesla Dynamics Labs"
                     className="w-full bg-[#f9faf7] border border-[#c4c7c7] rounded-lg p-3.5 text-sm font-display-tech text-black focus:outline-none focus:border-black transition-colors"
                   />
                 </div>
@@ -474,7 +464,6 @@ export const OrderPage: React.FC = () => {
                   <option value="RAPID (2–4 Days)">RAPID — 2–4 Days (Quick turnaround)</option>
                   <option value="STANDARD (5–8 Days)">STANDARD — 5–8 Days (Balanced &amp; recommended)</option>
                   <option value="EXTENDED (8–10 Days)">EXTENDED — 8–10 Days (Additional testing &amp; refinement)</option>
-                  <option value="Custom Scope / Ongoing">Custom Scope / Ongoing Engineering</option>
                 </select>
               </div>
 
