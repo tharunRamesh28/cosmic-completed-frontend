@@ -9,7 +9,6 @@ import { CapabilitiesCore } from './components/CapabilitiesCore';
 import { SmartDripShowcase } from './components/SmartDripShowcase';
 import { PricingSection } from './components/PricingSection';
 import { ProofOfScaleSection } from './components/ProofOfScaleSection';
-import { TeamPreviewSection } from './components/TeamPreviewSection';
 import { ScrollReveal } from './components/ScrollReveal';
 import { Footer } from './components/Footer';
 import { ProjectModal } from './components/ProjectModal';
@@ -243,12 +242,7 @@ function AppContent() {
                     <SmartDripShowcase onStartProject={handleStartProject} />
                   </ScrollReveal>
 
-                  {/* Section 4: Meet Our Team Spotlight */}
-                  <ScrollReveal>
-                    <TeamPreviewSection />
-                  </ScrollReveal>
-
-                  {/* Section 5: Transparent Engagement Models */}
+                  {/* Section 4: Transparent Engagement Models */}
                   <ScrollReveal>
                     <PricingSection
                       onSelectTier={(tier) => handleStartProject(undefined, tier)}

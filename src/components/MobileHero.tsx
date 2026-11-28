@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ENGINEERING_DISCIPLINES } from '../data/heroData';
 import { MobileWheelPicker } from './MobileWheelPicker';
 import { useRouter } from '../router';
-import { Users } from 'lucide-react';
+import { Users, ArrowRight } from 'lucide-react';
 
 interface MobileHeroProps {
   onStartProject: () => void;
@@ -388,10 +388,12 @@ export const MobileHero: React.FC<MobileHeroProps> = ({ onStartProject }) => {
               <button
                 onClick={() => navigate('/about')}
                 id="hero-meet-team-btn-mobile"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg border border-[#c4c7c7] bg-white text-[#191c1b] hover:border-black font-mono-tech text-xs uppercase tracking-wider font-bold shadow-2xs transition-all duration-200"
+                className="inline-flex items-center gap-2 bg-[#000000] text-[#c8f179] hover:bg-[#1a1a1a] active:scale-95 font-mono-tech text-xs uppercase tracking-wider font-bold px-4 py-2.5 rounded-xl border border-black shadow-sm transition-all duration-200 cursor-pointer group"
+                title="Meet our engineering team"
               >
-                <Users className="w-3.5 h-3.5 text-[#476800]" />
-                <span>Meet Team</span>
+                <Users className="w-3.5 h-3.5 text-[#c8f179]" />
+                <span>MEET OUR TEAM</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#c8f179] group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
           </div>

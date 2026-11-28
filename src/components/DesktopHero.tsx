@@ -513,12 +513,12 @@ export const DesktopHero: React.FC<DesktopHeroProps> = ({ onStartProject }) => {
               <button
                 onClick={() => navigate('/about')}
                 id="hero-meet-team-btn"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-[#c4c7c7] bg-white/90 hover:bg-white text-[#191c1b] hover:border-black font-mono-tech text-xs uppercase tracking-wider font-bold transition-all duration-200 shadow-2xs hover:shadow-sm hover:-translate-y-0.5 cursor-pointer group"
+                className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-[#000000] text-[#c8f179] hover:bg-[#1a1a1a] active:scale-95 border border-black font-mono-tech text-xs uppercase tracking-wider font-bold transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 cursor-pointer group"
                 title="Meet the engineers behind Zen Tech"
               >
-                <Users className="w-4 h-4 text-[#476800] group-hover:scale-110 transition-transform duration-200" />
-                <span>Meet Our Team</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#444748] group-hover:text-black group-hover:translate-x-0.5 transition-all duration-200" />
+                <Users className="w-4 h-4 text-[#c8f179]" />
+                <span>MEET OUR TEAM</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#c8f179] group-hover:translate-x-1 transition-transform duration-200" />
               </button>
             </div>
           </div>
