@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ENGINEERING_DISCIPLINES } from '../data/heroData';
 import { MobileWheelPicker } from './MobileWheelPicker';
+import { useRouter } from '../router';
+import { Users } from 'lucide-react';
 
 interface MobileHeroProps {
   onStartProject: () => void;
@@ -12,6 +14,7 @@ const TOTAL_FRAMES = 300;
 const MAX_CONCURRENT_LOADS = 4;
 
 export const MobileHero: React.FC<MobileHeroProps> = ({ onStartProject }) => {
+  const { navigate } = useRouter();
   const heroTrackRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
   const robotWrapperRef = useRef<HTMLDivElement>(null);
@@ -360,12 +363,12 @@ export const MobileHero: React.FC<MobileHeroProps> = ({ onStartProject }) => {
               ))}
             </div>
 
-            {/* 5. Touch-friendly CTA Button */}
-            <div className="flex items-center justify-center mt-2.5 sm:mt-3">
+            {/* 5. Touch-friendly CTA Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-2.5 sm:mt-3">
               <button
                 onClick={onStartProject}
                 id="hero-start-project-btn-mobile"
-                className="cosmic-project-btn text-sm sm:text-base py-2.5 px-6 shadow-xs"
+                className="cosmic-project-btn text-sm sm:text-base py-2.5 px-5 shadow-xs"
               >
                 <svg
                   height="18"
@@ -380,6 +383,15 @@ export const MobileHero: React.FC<MobileHeroProps> = ({ onStartProject }) => {
                   />
                 </svg>
                 <span>Start a Project</span>
+              </button>
+
+              <button
+                onClick={() => navigate('/about')}
+                id="hero-meet-team-btn-mobile"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg border border-[#c4c7c7] bg-white text-[#191c1b] hover:border-black font-mono-tech text-xs uppercase tracking-wider font-bold shadow-2xs transition-all duration-200"
+              >
+                <Users className="w-3.5 h-3.5 text-[#476800]" />
+                <span>Meet Team</span>
               </button>
             </div>
           </div>

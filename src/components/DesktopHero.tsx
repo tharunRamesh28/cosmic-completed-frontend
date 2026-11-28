@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CursorGrid } from './CursorGrid';
 import { VALUE_PROPOSITIONS, ENGINEERING_DISCIPLINES } from '../data/heroData';
+import { useRouter } from '../router';
+import { Users, ArrowRight } from 'lucide-react';
 
 interface DesktopHeroProps {
   onStartProject: () => void;
@@ -12,6 +14,7 @@ const TOTAL_FRAMES = 300;
 const MAX_CONCURRENT_LOADS = 12;
 
 export const DesktopHero: React.FC<DesktopHeroProps> = ({ onStartProject }) => {
+  const { navigate } = useRouter();
   const trackRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
   const robotWrapperRef = useRef<HTMLDivElement>(null);
@@ -485,8 +488,8 @@ export const DesktopHero: React.FC<DesktopHeroProps> = ({ onStartProject }) => {
               ))}
             </div>
 
-            {/* CTA Button: Start a Project */}
-            <div className="flex items-center justify-center mt-5">
+            {/* CTA Buttons: Start a Project & Meet Our Team */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-5">
               <button
                 onClick={onStartProject}
                 id="hero-start-project-btn"
@@ -505,6 +508,17 @@ export const DesktopHero: React.FC<DesktopHeroProps> = ({ onStartProject }) => {
                   ></path>
                 </svg>
                 <span>Start a Project</span>
+              </button>
+
+              <button
+                onClick={() => navigate('/about')}
+                id="hero-meet-team-btn"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-[#c4c7c7] bg-white/90 hover:bg-white text-[#191c1b] hover:border-black font-mono-tech text-xs uppercase tracking-wider font-bold transition-all duration-200 shadow-2xs hover:shadow-sm hover:-translate-y-0.5 cursor-pointer group"
+                title="Meet the engineers behind Zen Tech"
+              >
+                <Users className="w-4 h-4 text-[#476800] group-hover:scale-110 transition-transform duration-200" />
+                <span>Meet Our Team</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#444748] group-hover:text-black group-hover:translate-x-0.5 transition-all duration-200" />
               </button>
             </div>
           </div>

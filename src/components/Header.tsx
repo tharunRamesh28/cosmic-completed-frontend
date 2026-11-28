@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, LogOut, User as UserIcon, ClipboardList } from 'lucide-react';
+import { Menu, X, LogOut, User as UserIcon, ClipboardList, Users } from 'lucide-react';
 import { useRouter } from '../router';
 import { useAuth } from '../lib/AuthContext';
 import { motion, useMotionValue, useSpring, useTransform, MotionValue } from 'motion/react';
@@ -145,6 +145,26 @@ export const Header: React.FC<HeaderProps> = ({
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           >
+            {/* Meet Our Team Navigation CTA */}
+            <div className="hidden md:flex items-center">
+              <MagnifyHeaderItem mouseX={mouseX}>
+                <button
+                  onClick={() => navigate('/about')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-mono-tech text-xs font-bold transition-all duration-200 shadow-2xs hover:-translate-y-0.5 cursor-pointer ${
+                    path === '/about'
+                      ? 'bg-black text-[#c8f179] border-black shadow-[0_0_10px_rgba(200,241,121,0.25)]'
+                      : isCircuitShaderActive
+                      ? 'border-neutral-700 bg-neutral-900/80 text-neutral-200 hover:border-[#c8f179] hover:text-[#c8f179]'
+                      : 'border-[#c4c7c7]/80 bg-white/95 text-[#191c1b] hover:border-black hover:text-black'
+                  }`}
+                  title="Meet the engineers behind Zen Tech"
+                >
+                  <Users className="w-3.5 h-3.5 text-[#476800]" />
+                  <span>MEET OUR TEAM</span>
+                </button>
+              </MagnifyHeaderItem>
+            </div>
+
             {user ? (
               <div className="hidden sm:flex items-center gap-4">
                 <MagnifyHeaderItem mouseX={mouseX}>
